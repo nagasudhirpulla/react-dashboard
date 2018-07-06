@@ -3,7 +3,7 @@ https://github.com/SophieDeBenedetto/catbook-redux/blob/blog-post/src/index.js
 */
 import { Provider } from 'react-redux';
 import configureStore from './store/index';
-import React from 'react';
+import React, { Component } from 'react';
 
 import './App.css';
 
