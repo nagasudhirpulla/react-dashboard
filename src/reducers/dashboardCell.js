@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
-import {equipDefaultProp, keepSpecifiedPropsOnly} from '../utils/objectUtils'
+import {equipDefaultProp, keepSpecifiedPropsOnly} from '../utils/objectUtils';
 
 export default function dashboardCellReducer(state = initialState.dashbard_cell, action) {
     switch (action.type) {
@@ -21,13 +21,13 @@ export default function dashboardCellReducer(state = initialState.dashbard_cell,
 }
 
 function createDashboardCell(action) {
-    initialCell = initialState.dashbard_cell;
+    let initialCell = initialState.dashbard_cell;
     
-    cellPropKeys = Object.keys(initialCell);
-    dashbardCell = keepSpecifiedPropsOnly(action, cellPropKeys);
+    let cellPropKeys = Object.keys(initialCell);
+    let dashbardCell = keepSpecifiedPropsOnly(action, cellPropKeys);
 
-    for (let i = 0; i < cellProps.length; i++) {
-        dashbardCell = equipDefaultProp(dashbardCell, cellPropKeys[i], initialCell[cellPropKeys[i]])
+    for (let i = 0; i < cellPropKeys.length; i++) {
+        dashbardCell = equipDefaultProp(dashbardCell, cellPropKeys[i], initialCell[cellPropKeys[i]]);
     }
 
     return dashbardCell;
