@@ -1,5 +1,9 @@
 /*
 https://github.com/SophieDeBenedetto/catbook-redux/blob/blog-post/src/index.js
+
+Using flexbox for aligning items
+https://www.youtube.com/watch?v=k32voqQhODc
+https://codepen.io/anon/pen/VKxRoE?editors=1100
 */
 import React from 'react';
 import { connect } from 'react-redux';
