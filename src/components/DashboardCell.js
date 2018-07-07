@@ -10,17 +10,17 @@ import classNames from 'classnames';
 
 const DashboardCell = ({ dashboardCell }) => {
     let cell_col_str = dashboardCell.cell_geometry.cell_col_str;
-    let cellClasses = classNames(cell_col_str,);
     let cellStyle = { 'minHeight': dashboardCell.cell_geometry.cell_min_height };
     let cellContainerStyle = { 'padding': '4px' };
     return (
-        <div className={cellClasses} style={cellContainerStyle}>
+        <div className={classNames(cell_col_str, )} style={cellContainerStyle}>
+            {/* <span>{JSON.stringify(dashboardCell)}</span> */}
+            {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
             <div className={classNames('dashboard_cell', )} style={cellStyle}>
                 <div className={'dashboard_cell_bar'}>
                     <span>{dashboardCell.cell_name}</span>
                 </div>
-                {/* <span>{JSON.stringify(dashboardCell)}</span> */}
-                {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
+                {/*insert a plot component here*/}
             </div>
 
         </div>
