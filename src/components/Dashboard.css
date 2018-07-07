@@ -1,5 +1,9 @@
 .dashboard{
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid lightcoral;
+    
+}
+
+.dashboard_bar{
+    padding: 4px;
+    border: 1px solid rgb(128, 51, 0);
+    font-size: medium;
 }
