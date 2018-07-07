@@ -2,10 +2,10 @@
   "name": "sample_csv",
   "version": "1.0.0",
   "description": "",
-  "main": "static_files_server.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start static_files_server --name=\"file_server\"",
+    "start": "pm2 start app.js --name=\"file_server\"",
     "restart": "pm2 restart file_server",
     "delete": "pm2 delete file_server"
   },

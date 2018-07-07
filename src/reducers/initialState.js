@@ -16,7 +16,8 @@ export default {
                 plot_props: {
                     plot_type: 'scatter',
                     x_heading_str: 'x',
-                    y_heading_str: 'y'
+                    y_heading_str: 'y',
+                    csv_address: 'http://localhost:8807/sample_1.csv'
                 }
             },
             {
@@ -29,8 +30,9 @@ export default {
                 },
                 plot_props: {
                     plot_type: 'scatter',
-                    x_heading_str: 'x',
-                    y_heading_str: 'y'
+                    x_heading_str: 'a',
+                    y_heading_str: 'b',
+                    csv_address: 'http://localhost:8807/sample_2.csv'
                 }
             },
             {
@@ -44,7 +46,8 @@ export default {
                 plot_props: {
                     plot_type: 'scatter',
                     x_heading_str: 'x',
-                    y_heading_str: 'y'
+                    y_heading_str: 'y',
+                    csv_address: 'http://localhost:8807/sample_1.csv'
                 }
             }
         ]
@@ -60,7 +63,8 @@ export default {
         plot_props: {
             plot_type: 'scatter',
             x_heading_str: 'x',
-            y_heading_str: 'y'
+            y_heading_str: 'y',
+            csv_address: 'http://localhost:8807/sample_1.csv'
         }
     }
 }
