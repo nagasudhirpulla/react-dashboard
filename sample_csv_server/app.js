@@ -22,8 +22,10 @@ server.listen(8807);
 var express = require('express');
 var path = require('path');
 var serveStatic = require('serve-static');
+var cors = require('cors');
 
 var app = express();
+app.use(cors());
 
 app.use(serveStatic(path.join(__dirname, 'csv_files')));
 //app.use(serveStatic(path.join(__dirname, 'public')));

@@ -39,9 +39,9 @@ it('tests the fetchCSVColumns function', done => {
         expect(result).not.toBe(null);
         expect(typeof result).toBe('object');
         expect(result).toHaveProperty('x', 'y', 'z')
-        expect(Array.isArray(result['x'])).toBe(true);
-        expect(Array.isArray(result['y'])).toBe(true);
-        expect(Array.isArray(result['z'])).toBe(true);
+        expect(Array.isArray(result[0])).toBe(true);
+        expect(Array.isArray(result[1])).toBe(true);
+        expect(Array.isArray(result[2])).toBe(true);
         console.log(result);
         done();
     });

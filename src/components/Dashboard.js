@@ -19,7 +19,7 @@ const Dashboard = ({ dashboard, onDashBoardFetchClick }) => {
             <div className={classNames('row', )}>
                 <div className={classNames('col-md-12', 'dashboard_bar')}>
                     <span>{dashboard.dashboard_name}</span></div>
-            </div>            
+            </div>
             <div className={classNames('row', )}>
                 {
                     dashboard.dashboard_cells.map((cell, cellIndex) =>

@@ -3,7 +3,7 @@ import { waterfall } from 'async';
 
 export function fetchCSVArray(csvUrl, callback) {
     get(csvUrl, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (!error && response.statusCode === 200) {
             let csv = body;
             let delimiter = ',';
             // Continue with csv processing here.
@@ -31,27 +31,27 @@ export function fetchCSVColumns(csvUrl, columnNames, callback) {
         },
         function (csvArray, cb) {
             // extract the columns from csv Array
-            let columnsDict = extractCSVColumnsDict(csvArray, columnNames);
-            cb(null, columnsDict);
+            let columnsArr = extractCSVColumnsArr(csvArray, columnNames);
+            cb(null, columnsArr);
         }
     ], function (err, result) {
         return callback(err, result);
     });
 }
 
-export function extractCSVColumnsDict(csvArray, columnNames) {
-    let csvColsDict = {}
+export function extractCSVColumnsArr(csvArray, columnNames) {
+    let csvColsArr = []
     //initialize the result
     for (let i = 0; i < columnNames.length; i++) {
-        csvColsDict[columnNames[i]] = [];
+        csvColsArr[i] = [];
     }
     // check if the csv has atleast 2 rows
     if (csvArray.length < 2) {
-        return csvColsDict;
+        return csvColsArr;
     }
     // check if the csv header has atleast one column
     if (csvArray[0].length < 1) {
-        return csvColsDict;
+        return csvColsArr;
     }
     for (let i = 0; i < columnNames.length; i++) {
         let colDataArr = [];
@@ -65,7 +65,7 @@ export function extractCSVColumnsDict(csvArray, columnNames) {
             colDataArr.push(csvArray[k][colIndex]);
         }
         // store data in the result dictionary
-        csvColsDict[columnNames[i]] = colDataArr;
+        csvColsArr[i] = colDataArr;
     }
-    return csvColsDict;
+    return csvColsArr;
 }
