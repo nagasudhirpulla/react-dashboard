@@ -1,4 +1,4 @@
-import { fetchCSVArray } from './csvUtils';
+import { fetchCSVArray,fetchCSVColumns } from './csvUtils';
 import { waterfall } from 'async';
 
 /*
@@ -12,6 +12,7 @@ https://stackoverflow.com/questions/45149744/how-does-jests-callback-testing-act
 it('tests the fetchCSVArray function', done => {
     waterfall([
         function(callback){
+            // get the csv Array
             fetchCSVArray('http://localhost:8807/sample_1.csv', (err, res)=>{
                 callback(err, res);
             });
@@ -20,6 +21,27 @@ it('tests the fetchCSVArray function', done => {
         expect(err).toBe(null);
         expect(result).not.toBe(null);
         expect(Array.isArray(result)).toBe(true);
+        console.log(result);
+        done();
+    });
+});
+
+it('tests the fetchCSVColumns function', done => {
+    waterfall([
+        function(callback){
+            // get the csv Array
+            fetchCSVColumns('http://localhost:8807/sample_1.csv', ['x', 'y', 'z'], (err, res)=>{
+                callback(err, res);
+            });
+        }
+    ], function (err, result) {
+        expect(err).toBe(null);
+        expect(result).not.toBe(null);
+        expect(typeof result).toBe('object');
+        expect(result).toHaveProperty('x', 'y', 'z')
+        expect(Array.isArray(result['x'])).toBe(true);
+        expect(Array.isArray(result['y'])).toBe(true);
+        expect(Array.isArray(result['z'])).toBe(true);
         console.log(result);
         done();
     });
