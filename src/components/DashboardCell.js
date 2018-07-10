@@ -8,12 +8,10 @@ import React from 'react';
 import './DashboardCell.css';
 import ScatterPlot from './ScatterPlot'
 import classNames from 'classnames';
-import { fetchCSVArray, extractCSVColumnsArr } from '../utils/csvUtils';
+import { fetchCSVArray, extractCSVColumnsArr, extractCSVHColumnsArr } from '../utils/csvUtils';
 import { waterfall } from 'async';
 
 class DashboardCell extends React.Component {
-    
-
     constructor(props) {
         super(props);
         this.state = {
@@ -32,19 +30,24 @@ class DashboardCell extends React.Component {
         this.state.cellContainerStyle = cellContainerStyle;
         this.state.cell_name = dashboardCell.cell_name;
         let cellComponent;
-        if (dashboardCell.cell_type === 'csv_plot') {
+        if (dashboardCell.cell_type === 'csv_plot' || dashboardCell.cell_type === 'csv_h_plot') {
             // create a Scatter Plot component
             waterfall([
                 function (callback) {
                     // get the csv Array
-                    fetchCSVArray(dashboardCell.plot_props.csv_address, (err, res) => {
+                    fetchCSVArray(dashboardCell.plot_props.csv_address, dashboardCell.plot_props.csv_delimiter, (err, res) => {
                         callback(err, res);
                     });
                 }
             ], function (err, csvArray) {
-                let xArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
-                let yArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
-                //stub
+                let xArrays = [], yArrays = [];
+                if (dashboardCell.cell_type === 'csv_plot') {
+                    xArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
+                    yArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
+                } else if (dashboardCell.cell_type === 'csv_h_plot') {
+                    xArrays = extractCSVHColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
+                    yArrays = extractCSVHColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
+                }
                 cellComponent = <ScatterPlot
                     {...dashboardCell.plot_props} xArrays={xArrays} yArrays={yArrays}
                 />;

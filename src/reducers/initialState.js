@@ -52,6 +52,39 @@ export default {
                     colors: ['green'],
                     csv_address: 'http://localhost:8807/sample_1.csv'
                 }
+            },
+            {
+                cell_name: 'Fourth Cell',
+                cell_type: 'csv_h_plot',
+                cell_geometry: {
+                    cell_col_str: 'col-sm-12',
+                    cell_min_width: '0px',
+                    cell_min_height: '100px'
+                },
+                plot_props: {
+                    plot_modes: ['lines'],
+                    x_headings: ['TIMEBLOCK', 'TIMEBLOCK', 'TIMEBLOCK'],
+                    y_headings: ['WR-NR_TTC', 'WR-NR_ATC', 'NR_TOTAL'],
+                    colors: ['green', 'yellow', 'red'],
+                    csv_address: 'http://localhost:8807/scada.txt',
+                    csv_delimiter: '   '
+                }
+            },
+            {
+                cell_name: 'Fifth Cell',
+                cell_type: 'csv_h_plot',
+                cell_geometry: {
+                    cell_col_str: 'col-sm-12',
+                    cell_min_width: '0px',
+                    cell_min_height: '100px'
+                },
+                plot_props: {
+                    plot_modes: ['lines'],
+                    x_headings: ['x'],
+                    y_headings: ['y'],
+                    colors: ['green'],
+                    csv_address: 'http://localhost:8807/sample_3.csv'
+                }
             }
         ]
     },
