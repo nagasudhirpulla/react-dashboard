@@ -19,8 +19,10 @@ class DashboardCell extends React.Component {
             containerColStr: '',
             cellStyle: {},
             cellContainerStyle: {},
-            cell_name: 'Cell name'
+            cell_name: 'Cell name',
+            _ismounted: false
         };
+        this.state._ismounted = false;
         let dashboardCell = props.dashboardCell;
         let containerColStr = dashboardCell.cell_geometry.cell_col_str;
         let cellStyle = { 'minHeight': dashboardCell.cell_geometry.cell_min_height };
@@ -40,6 +42,9 @@ class DashboardCell extends React.Component {
                     });
                 }
             ], function (err, csvArray) {
+                if (this.state._ismounted !== true) {
+                    return;
+                }
                 let xArrays = [], yArrays = [];
                 if (dashboardCell.cell_type === 'csv_plot') {
                     xArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
@@ -55,6 +60,14 @@ class DashboardCell extends React.Component {
                 this.forceUpdate();
             }.bind(this));
         }
+    }
+
+    componentDidMount() {
+        this.setState({ _ismounted: true });
+    }
+
+    componentWillUnmount() {
+        this.setState({ _ismounted: false });
     }
 
     render() {

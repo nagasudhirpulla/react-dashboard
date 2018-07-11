@@ -11,18 +11,19 @@ import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
 
-const Dashboard = ({ dashboard, onDashBoardFetchClick }) => {
+
+const Dashboard = (props) => {
     return (
         <div className={classNames('container-fluid', { 'dashboard': true })}>
             {/* <span>{JSON.stringify(dashboard)}</span> */}
             {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
             <div className={classNames('row', )}>
                 <div className={classNames('col-md-12', 'dashboard_bar')}>
-                    <span>{dashboard.dashboard_name}</span></div>
+                    <span>{props.dashboard.dashboard_name}</span></div>
             </div>
             <div className={classNames('row', )}>
                 {
-                    dashboard.dashboard_cells.map((cell, cellIndex) =>
+                    props.dashboard.dashboard_cells.map((cell, cellIndex) =>
                         <DashboardCell
                             key={cellIndex}
                             dashboardCell={cell}

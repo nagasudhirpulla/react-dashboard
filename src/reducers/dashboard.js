@@ -2,10 +2,14 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 import dashboardCellReducer from './dashboardCell';
 
-export default function dashboardReducer(state = initialState.dashBoard, action) {
+export default function dashboardReducer(state = initialState.dashboard, action) {
     switch (action.type) {
+        case types.SET_DASHBOARD:
+            return {
+                ...action.dashboard
+            };
         case types.RESET_DASHBOARD:
-            return initialState.dashBoard;
+            return initialState.dashboard;
         case types.ADD_DASHBOARD_CELL:
             let targetIndex = action.index;
             if (targetIndex == null || targetIndex > state.dashboard_cells.length || targetIndex < 0) {

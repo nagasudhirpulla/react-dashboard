@@ -41,19 +41,25 @@ class ScatterPlot extends React.Component {
             }
 
         }
-        this.state = { data: compiledPlotData, layout: {autosize: true} };
+        this.state = { data: compiledPlotData, layout: { autosize: true } };
+        this.state.plotComp = <Plot
+            style={{ width: '100%', height: '100%', margin: '0px' }}
+            data={this.state.data}
+            layout={this.state.layout}
+            onInitialized={(figure) => this.setState(figure)}
+            onUpdate={(figure) => this.setState(figure)}
+        />
     }
+
+    componentWillUnmount() {
+        this.setState({ plotComp: <div></div> });
+    }
+
     render() {
         return (
             <div>
                 {/* <span>{JSON.stringify(this.state)}</span> */}
-                <Plot
-                    style={{width:'100%', height:'100%', margin:'0px'}}
-                    data={this.state.data}
-                    layout={this.state.layout}
-                    onInitialized={(figure) => this.setState(figure)}
-                    onUpdate={(figure) => this.setState(figure)}
-                />
+                {this.state.plotComp}
             </div>
         );
     }

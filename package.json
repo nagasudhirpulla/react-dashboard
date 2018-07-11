@@ -8,6 +8,7 @@
     "cors": "^2.8.4",
     "expr-eval": "^1.2.2",
     "plotly.js": "^1.39.0",
+    "query-string": "^6.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-plotly.js": "^2.2.0",
@@ -15,7 +16,9 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
