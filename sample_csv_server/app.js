@@ -28,5 +28,6 @@ var app = express();
 app.use(cors());
 
 app.use(serveStatic(path.join(__dirname, 'csv_files')));
+// app.use('/sudhir', serveStatic(path.join(__dirname, 'csv_files')));
 //app.use(serveStatic(path.join(__dirname, 'public')));
 app.listen(8807, () => console.log('Example app listening on port 8807!'))
