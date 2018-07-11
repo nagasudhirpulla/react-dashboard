@@ -21,7 +21,7 @@ it('tests the fetchCSVArray function', done => {
         expect(err).toBe(null);
         expect(result).not.toBe(null);
         expect(Array.isArray(result)).toBe(true);
-        console.log(result);
+        //console.log(result);
         done();
     });
 });
@@ -41,7 +41,7 @@ it('tests the fetchCSVColumns function', done => {
         expect(Array.isArray(result[0])).toBe(true);
         expect(Array.isArray(result[1])).toBe(true);
         expect(Array.isArray(result[2])).toBe(true);
-        console.log(result);
+        //console.log(result);
         done();
     });
 });
@@ -50,7 +50,7 @@ it('tests the fetchCSVHColumns function', done => {
     waterfall([
         function (callback) {
             // get the csv Array
-            fetchCSVHColumns('http://localhost:8807/sample_3.csv', undefined, ['x', 'y', 'z'], (err, res) => {
+            fetchCSVHColumns('http://localhost:8807/sample_3.csv', undefined, ['x', '-y', 'x-y', 'max(x,y)', 'z'], (err, res) => {
                 callback(err, res);
             });
         }

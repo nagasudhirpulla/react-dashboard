@@ -64,7 +64,7 @@ export default {
                 plot_props: {
                     plot_modes: ['lines'],
                     x_headings: ['TIMEBLOCK', 'TIMEBLOCK', 'TIMEBLOCK'],
-                    y_headings: ['WR-NR_TTC', 'WR-NR_ATC', 'NR_TOTAL'],
+                    y_headings: ['WR_NR_TTC', 'WR_NR_ATC', '-NR_TOTAL'],
                     colors: ['green', 'yellow', 'red'],
                     csv_address: 'http://localhost:8807/scada.txt',
                     csv_delimiter: '   '
