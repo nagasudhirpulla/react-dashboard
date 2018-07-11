@@ -8,7 +8,7 @@ import React from 'react';
 import './DashboardCell.css';
 import ScatterPlot from './ScatterPlot'
 import classNames from 'classnames';
-import { fetchCSVArray, extractCSVColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
+import { fetchCSVArray, extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
 import { waterfall } from 'async';
 
 class DashboardCell extends React.Component {
@@ -42,8 +42,8 @@ class DashboardCell extends React.Component {
             ], function (err, csvArray) {
                 let xArrays = [], yArrays = [];
                 if (dashboardCell.cell_type === 'csv_plot') {
-                    xArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
-                    yArrays = extractCSVColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
+                    xArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
+                    yArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
                 } else if (dashboardCell.cell_type === 'csv_h_plot') {
                     xArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
                     yArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.y_headings);

@@ -31,7 +31,7 @@ export function fetchCSVColumns(csvUrl, delimiter, columnNames, callback) {
         },
         function (csvArray, cb) {
             // extract the columns from csv Array
-            let columnsArr = extractCSVColumnsArr(csvArray, columnNames);
+            let columnsArr = extractCSVExprColumnsArr(csvArray, columnNames);
             cb(null, columnsArr);
         }
     ], function (err, result) {
@@ -137,6 +137,65 @@ export function extractCSVHColumnsArr(csvArray, columnNames) {
 }
 
 // todo test this function
+export function extractCSVExprColumnsArr(csvArray, columnNames) {
+    //initialize the result
+    let csvColsArr = []
+    for (let i = 0; i < columnNames.length; i++) {
+        csvColsArr[i] = [];
+    }
+
+    // check if the csv has atleast 2 rows
+    if (csvArray.length < 2) {
+        return csvColsArr;
+    }
+    // check if the csv header has atleast one column
+    if (csvArray[0].length < 1) {
+        return csvColsArr;
+    }
+
+    // get the array headers
+    let arrayHeaders = csvArray[0];
+    
+    for (let i = 0; i < columnNames.length; i++) {
+        // extract the headers required from the columnName
+        let res = parseVariables(columnNames[i]);
+        let columnNameVars = res.vars;
+        let columnNameExpr = res.expr;
+        let columnNameCSVHeaderIndices = [];
+
+        // find the columnNameCSVHeaderIndices
+        for (let k = 0; k < columnNameVars.length; k++) {
+            const columnNameVar = columnNameVars[k];
+            const columnNameVarInd = arrayHeaders.indexOf(columnNameVar)
+            if (columnNameVarInd < 0) {
+                // didnot find one of the column variable in csvArrayHeaders
+                continue;
+            }
+            columnNameCSVHeaderIndices[k] = columnNameVarInd;
+        }
+
+        // push data of columnName into array
+        let columnNameDataArr = []
+
+        // iterate through each row to do columnName expression evaluation
+        for (let k = 1; k < csvArray.length - 1; k++) {
+            // get the columnName variables in each row for evaluation
+            let varsObj = {};
+            for (let p = 0; p < columnNameCSVHeaderIndices.length; p++) {
+                varsObj[columnNameVars[p]] = csvArray[k][columnNameCSVHeaderIndices[p]];
+            }
+
+            // evaluate columnName expression in each row
+            columnNameDataArr.push(columnNameExpr.evaluate(varsObj));
+        }
+
+        // store data in the result array
+        csvColsArr[i] = columnNameDataArr;
+    }
+
+    return csvColsArr;
+}
+
 export function extractCSVHExprColumnsArr(csvArray, columnNames) {
     //initialize the result
     let csvColsArr = []
@@ -160,7 +219,6 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
     }
 
     for (let i = 0; i < columnNames.length; i++) {
-        let columnNameDataArr = [];
         // extract the headers required from the columnName
         let res = parseVariables(columnNames[i]);
         let columnNameVars = res.vars;
@@ -179,16 +237,16 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
         }
 
         // push data of columnName into array
-        columnNameDataArr = []
-            
+        let columnNameDataArr = []
+
         // iterate through each row to do columnName expression evaluation
-        for (let k = 1; k < csvArray[0].length - 1; k++) {                
+        for (let k = 1; k < csvArray[0].length - 1; k++) {
             // get the columnName variables in each row for evaluation
             let varsObj = {};
             for (let p = 0; p < columnNameCSVHeaderIndices.length; p++) {
                 varsObj[columnNameVars[p]] = csvArray[columnNameCSVHeaderIndices[p]][k];
             }
-            
+
             // evaluate columnName expression in each row
             columnNameDataArr.push(columnNameExpr.evaluate(varsObj));
         }

@@ -61,7 +61,7 @@ it('tests the fetchCSVHColumns function', done => {
         expect(Array.isArray(result[0])).toBe(true);
         expect(Array.isArray(result[1])).toBe(true);
         expect(Array.isArray(result[2])).toBe(true);
-        console.log(result);
+        //console.log(result);
         done();
     });
 });
