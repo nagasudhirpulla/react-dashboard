@@ -10,6 +10,9 @@ export default function dashboardReducer(state = initialState.dashboard, action)
             };
         case types.RESET_DASHBOARD:
             return initialState.dashboard;
+        case types.FETCH_DASHBOARD_CSVS:
+            //stub    
+            return state;
         case types.ADD_DASHBOARD_CELL:
             let targetIndex = action.index;
             if (targetIndex == null || targetIndex > state.dashboard_cells.length || targetIndex < 0) {

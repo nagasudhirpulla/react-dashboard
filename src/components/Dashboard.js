@@ -10,6 +10,9 @@ import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
+import { withRouter } from 'react-router-dom'
+import { loadCellCSVArray } from '../actions/dashBoardActions'
+import { delimiter } from 'path';
 
 
 const Dashboard = (props) => {
@@ -26,7 +29,9 @@ const Dashboard = (props) => {
                     props.dashboard.dashboard_cells.map((cell, cellIndex) =>
                         <DashboardCell
                             key={cellIndex}
+                            cellIndex={cellIndex}
                             dashboardCell={cell}
+                            onCellCSVFetchClick={props.onCellCSVFetchClick}
                         />
                     )
                 }
@@ -41,8 +46,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onDashBoardFetchClick: () => {
-            return 'sudhir';
+        onCellCSVFetchClick: (key, url, delimiter) => {
+            loadCellCSVArray(dispatch, key, url, delimiter);
         }
     };
 };

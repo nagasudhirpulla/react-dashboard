@@ -8,66 +8,42 @@ import React from 'react';
 import './DashboardCell.css';
 import ScatterPlot from './ScatterPlot'
 import classNames from 'classnames';
-import { fetchCSVArray, extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
-import { waterfall } from 'async';
+import { extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
 
 class DashboardCell extends React.Component {
     constructor(props) {
         super(props);
+        let cellContainerStyle = { 'padding': '0px' };
         this.state = {
             cellComponent: <div></div>,
             containerColStr: '',
             cellStyle: {},
-            cellContainerStyle: {},
-            cell_name: 'Cell name',
-            _ismounted: false
+            cellContainerStyle: cellContainerStyle,
+            csvArray: [],
+            onCellCSVFetchClick: props.onCellCSVFetchClick,
+            cellIndex: props.cellIndex
         };
-        this.state._ismounted = false;
-        let dashboardCell = props.dashboardCell;
-        let containerColStr = dashboardCell.cell_geometry.cell_col_str;
-        let cellStyle = { 'minHeight': dashboardCell.cell_geometry.cell_min_height };
-        let cellContainerStyle = { 'padding': '0px' };
+        this.propsToCompState(props);        
+        props.onCellCSVFetchClick(props.cellIndex, props.dashboardCell.plot_props.csv_address, props.dashboardCell.plot_props.csv_delimiter);
+    }
+
+    propsToCompState(props) {
+        this.state.dashboardCell = props.dashboardCell;
+        if (props.dashboardCell.plot_props.csvArray !== undefined) {
+            this.state.csvArray = props.dashboardCell.plot_props.csvArray;
+        }
+        let containerColStr = props.dashboardCell.cell_geometry.cell_col_str;
+        let cellStyle = { 'minHeight': props.dashboardCell.cell_geometry.cell_min_height };
         this.state.containerColStr = containerColStr;
         this.state.cellStyle = cellStyle;
-        this.state.cellContainerStyle = cellContainerStyle;
-        this.state.cell_name = dashboardCell.cell_name;
-        let cellComponent;
-        if (dashboardCell.cell_type === 'csv_plot' || dashboardCell.cell_type === 'csv_h_plot') {
-            // create a Scatter Plot component
-            waterfall([
-                function (callback) {
-                    // get the csv Array
-                    fetchCSVArray(dashboardCell.plot_props.csv_address, dashboardCell.plot_props.csv_delimiter, (err, res) => {
-                        callback(err, res);
-                    });
-                }
-            ], function (err, csvArray) {
-                if (this.state._ismounted !== true) {
-                    return;
-                }
-                let xArrays = [], yArrays = [];
-                if (dashboardCell.cell_type === 'csv_plot') {
-                    xArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
-                    yArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
-                } else if (dashboardCell.cell_type === 'csv_h_plot') {
-                    xArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
-                    yArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
-                }
-                cellComponent = <ScatterPlot
-                    {...dashboardCell.plot_props} xArrays={xArrays} yArrays={yArrays}
-                />;
-                this.state.cellComponent = cellComponent;
-                this.forceUpdate();
-            }.bind(this));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.propsToCompState(nextProps);
+        // check if url has changes
+        if (this.state.dashboardCell.plot_props.csv_address !== nextProps.dashboardCell.plot_props.csv_address) {
+            this.state.onCellCSVFetchClick(this.state.cellIndex, this.state.dashboardCell.plot_props.csv_address, this.state.dashboardCell.plot_props.csv_delimiter);
         }
-    }
-
-    componentDidMount() {
-        this.setState({ _ismounted: true });
-    }
-
-    componentWillUnmount() {
-        this.setState({ _ismounted: false });
     }
 
     render() {
@@ -77,10 +53,9 @@ class DashboardCell extends React.Component {
                 {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
                 <div className={classNames('dashboard_cell', )} style={this.state.cellStyle}>
                     <div className={'dashboard_cell_bar'}>
-                        <span>{this.state.cell_name}</span>
+                        <span>{this.state.dashboardCell.cell_name}</span>
                     </div>
-                    {/*insert a plot component here*/}
-                    {this.state.cellComponent}
+                    {JSON.stringify(this.state.dashboardCell.csvArray)}
                 </div>
             </div>
         );

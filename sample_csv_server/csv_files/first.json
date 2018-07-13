@@ -2,7 +2,7 @@
     "dashboard_name": "First Dashboard",
     "dashboard_cells": [
         {
-            "cell_name": "Fourth Cell",
+            "cell_name": "Test Cell",
             "cell_type": "csv_h_plot",
             "cell_geometry": {
                 "cell_col_str": "col-sm-12",
