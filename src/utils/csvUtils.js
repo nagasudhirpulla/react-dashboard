@@ -144,18 +144,23 @@ export function extractCSVExprColumnsArr(csvArray, columnNames) {
         csvColsArr[i] = [];
     }
 
+    // check if csvArray is an array
+    if (csvArray === undefined || csvArray === null || csvArray.constructor !== Array) {
+        return csvColsArr;
+    }
+
     // check if the csv has atleast 2 rows
     if (csvArray.length < 2) {
         return csvColsArr;
     }
-    // check if the csv header has atleast one column
-    if (csvArray[0].length < 1) {
+    // check if the csv header is array and has atleast one column
+    if (csvArray[0].constructor !== Array || csvArray[0].length < 1) {
         return csvColsArr;
     }
 
     // get the array headers
     let arrayHeaders = csvArray[0];
-    
+
     for (let i = 0; i < columnNames.length; i++) {
         // extract the headers required from the columnName
         let res = parseVariables(columnNames[i]);
@@ -203,8 +208,13 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
         csvColsArr[i] = [];
     }
 
-    // check if the csv has atleast 2 columns
-    if (csvArray[0].length < 2) {
+    // check if csvArray is an array
+    if (csvArray === undefined || csvArray === null || csvArray.constructor !== Array) {
+        return csvColsArr;
+    }
+
+    // check if the csv has atleast 2 columns and the first row is actually an array
+    if (csvArray[0].constructor !== Array || csvArray[0].length < 2) {
         return csvColsArr;
     }
     // check if the csv header has atleast one row
@@ -256,4 +266,19 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
     }
 
     return csvColsArr;
+}
+
+export async function fetchCSVArrayProm(csvUrl, delimiter = ',') {
+    try {
+        const resp = await fetch(csvUrl);
+        const csv = await resp.text();
+        let lines = csv.split('\r\n');
+        let result = lines.map(function (line) {
+            return line.split(delimiter);
+        });
+        return result;
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
 }

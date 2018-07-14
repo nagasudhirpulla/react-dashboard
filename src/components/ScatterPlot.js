@@ -5,11 +5,14 @@ https://github.com/plotly/react-plotly.js#state-management
 
 import React from 'react';
 import Plot from 'react-plotly.js';
-import Plotly from 'plotly.js'
 
 class ScatterPlot extends React.Component {
     constructor(props) {
         super(props);
+        this.propsToCompState(props);
+    }
+
+    propsToCompState(props) {
         // get the plot data from props
         let xArrays = props['xArrays'];
         let yArrays = props['yArrays'];
@@ -45,14 +48,14 @@ class ScatterPlot extends React.Component {
         this.state = { data: compiledPlotData, layout: { autosize: true } };
     }
 
-    componentWillUnmount() {
-        //Plotly.purge(this.state.plotComp);
+    componentWillReceiveProps(nextProps) {
+        this.propsToCompState(nextProps);
     }
 
     render() {
         return (
             <div>
-                {/* <span>{JSON.stringify(this.state)}</span> */}
+                {/*<span>{JSON.stringify(this.state)}</span>*/}
                 <Plot
                     style={{ width: '100%', height: '100%', margin: '0px' }}
                     data={this.state.data}

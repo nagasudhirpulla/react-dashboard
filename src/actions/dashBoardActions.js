@@ -1,24 +1,26 @@
 import * as types from './actionTypes';
 import rp from 'request-promise';
-import { fetchCSVArray } from '../utils/csvUtils';
+import { fetchCSVArrayProm, fetchCSVArray } from '../utils/csvUtils';
 
 export function loadDashboardFromAddress(filePath) {
-	return function (dispatch) {
-		rp(filePath)
-			.then(function (dashboardStr) {
-				try {
-					let dashboardObj = JSON.parse(dashboardStr);
-					dispatch(loadDashboard(dashboardObj));
-					// trigger csv fetching of each dashboardcell
-					updateAllDashboards(dispatch);
-				} catch (e) {
-					// do nothing
-					
-				}
-			})
-			.catch(function (err) {
-				
-			});
+	return async function (dispatch) {
+		try {
+			const resp = await fetch(filePath);
+			const dashboardObj = await resp.json();
+			await updateAllDashboards(dashboardObj, dispatch);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+}
+
+export function updateStoreDashboards(dashboardObj) {
+	return async function (dispatch) {
+		try {
+			await updateAllDashboards(dashboardObj, dispatch);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 }
 
@@ -39,6 +41,13 @@ export function setCellCSVArray(cellIndex, csvArray) {
 	return { type: types.EDIT_DASHBOARD_CELL_PROPS, index: cellIndex, editProps: { csvArray: csvArray } };
 }
 
-export function updateAllDashboards(dispatch) {
-	// todo complete
+export async function updateAllDashboards(dashboardObj, dispatch) {
+	// update the dashboardObj cells with the fetched csvArray
+	for (let i = 0; i < dashboardObj.dashboard_cells.length; i++) {
+		let csvUrl = dashboardObj.dashboard_cells[i].plot_props.csv_address;
+		let delimiter = dashboardObj.dashboard_cells[i].plot_props.csv_delimiter;
+		let csvArray = await fetchCSVArrayProm(csvUrl, delimiter);
+		dashboardObj.dashboard_cells[i].plot_props.csvArray = csvArray;
+	}
+	dispatch(loadDashboard(dashboardObj));
 }
