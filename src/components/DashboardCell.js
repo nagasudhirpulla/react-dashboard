@@ -13,12 +13,12 @@ import { extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/cs
 class DashboardCell extends React.Component {
     constructor(props) {
         super(props);
-        let cellContainerStyle = { 'padding': '0px' };
+        // initialize cell state
         this.state = {
             cellComponent: <div></div>,
             containerColStr: '',
             cellStyle: {},
-            cellContainerStyle: cellContainerStyle,
+            cellContainerStyle: { 'padding': '0px' },
             onCellCSVFetchClick: props.onCellCSVFetchClick,
             cellIndex: props.cellIndex
         };
@@ -27,16 +27,18 @@ class DashboardCell extends React.Component {
     }
 
     propsToCompState(props) {
+        // Plot information state
         this.state.dashboardCell = props.dashboardCell;
-        let containerColStr = props.dashboardCell.cell_geometry.cell_col_str;
-        let cellStyle = { 'minHeight': props.dashboardCell.cell_geometry.cell_min_height };
-        this.state.containerColStr = containerColStr;
-        this.state.cellStyle = cellStyle;
-        //this.setState({ _ismounted: true });
+        // Plot container col string like col-sm-6
+        this.state.containerColStr = props.dashboardCell.cell_geometry.cell_col_str;
+        
+        this.state.cellStyle = { 'minHeight': props.dashboardCell.cell_geometry.cell_min_height };
+        
+        // create the plot component
         const dashboardCell = this.state.dashboardCell;
         const csvArray = dashboardCell.plot_props.csvArray;
         if (dashboardCell.cell_type === 'csv_plot' || dashboardCell.cell_type === 'csv_h_plot') {
-            // update the cell component
+            //set the plot component xArrays and yArrays
             let xArrays = [], yArrays = [];
             if (dashboardCell.cell_type === 'csv_plot') {
                 xArrays = extractCSVExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
@@ -44,8 +46,8 @@ class DashboardCell extends React.Component {
             } else if (dashboardCell.cell_type === 'csv_h_plot') {
                 xArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.x_headings);
                 yArrays = extractCSVHExprColumnsArr(csvArray, dashboardCell.plot_props.y_headings);
-            }
-
+            }            
+            // update the plot component
             let cellComponent = <ScatterPlot
                 {...dashboardCell.plot_props} xArrays={xArrays} yArrays={yArrays}
             />;

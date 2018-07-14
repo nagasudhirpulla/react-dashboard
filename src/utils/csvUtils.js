@@ -1,3 +1,7 @@
+/*
+Convert callbacks to promises
+https://stackoverflow.com/questions/33476882/node-callback-to-promise-with-async-await
+*/
 import { get } from 'request';
 import { waterfall } from 'async';
 import { parseVariables } from './exprUtils'

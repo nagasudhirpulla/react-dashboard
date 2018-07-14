@@ -21,3 +21,19 @@ export function keepSpecifiedPropsOnly(sourceObj, propList) {
     }
     return obj;
 }
+
+export function equipProps(sourceObj, propNames) {
+    let source;
+    if (sourceObj === null || sourceObj === undefined) {
+        source = {};
+    }
+    else {
+        source = Object.assign({}, sourceObj);
+    }
+    for (let i = 0; i < propNames.length; i++) {
+        if (!source.hasOwnProperty(propNames[i])) {
+            source[propNames[i]] = {};
+        }
+    }
+    return source;
+}

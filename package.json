@@ -6,6 +6,7 @@
     "async": "^2.6.1",
     "classnames": "^2.2.6",
     "cors": "^2.8.4",
+    "deepmerge": "^2.1.1",
     "expr-eval": "^1.2.2",
     "plotly.js": "^1.39.0",
     "query-string": "^6.1.0",

@@ -16,7 +16,7 @@ const store = configureStore();
 if (filePath !== undefined && filePath !== null) {
     // set dasbaord state based on the filePath
     store.dispatch(loadDashboardFromAddress(filePath));
-}else{
+} else {
     // set dasbaord state based on initial state
     store.dispatch(updateStoreDashboards(store.getState().dashboard));
 }

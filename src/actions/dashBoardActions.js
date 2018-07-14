@@ -1,5 +1,4 @@
 import * as types from './actionTypes';
-import rp from 'request-promise';
 import { fetchCSVArrayProm, fetchCSVArray } from '../utils/csvUtils';
 
 export function loadDashboardFromAddress(filePath) {
@@ -25,7 +24,7 @@ export function updateStoreDashboards(dashboardObj) {
 }
 
 export function loadDashboard(dashboardObj) {
-	console.log(dashboardObj);
+	//console.log(dashboardObj);
 	return { type: types.SET_DASHBOARD, dashboard: dashboardObj };
 }
 
@@ -37,7 +36,7 @@ export function loadCellCSVArray(dispatch, cellIndex, url, delimiter) {
 }
 
 export function setCellCSVArray(cellIndex, csvArray) {
-	console.log(csvArray);
+	//console.log(csvArray);
 	return { type: types.EDIT_DASHBOARD_CELL_PROPS, index: cellIndex, editProps: { csvArray: csvArray } };
 }
 
