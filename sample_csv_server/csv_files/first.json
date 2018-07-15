@@ -15,10 +15,7 @@
                 "y_headings": ["WR_NR_TTC", "WR_NR_ATC", "-NR_TOTAL"],
                 "colors": ["green", "yellow", "red"],
                 "csv_address": "http://localhost:8807/scada.txt",
-                "csv_delimiter": "   ",
-                "layout":{
-                    "margin": {"b": 0}
-                }
+                "csv_delimiter": "   "
             }
         }
     ]
