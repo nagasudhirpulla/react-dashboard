@@ -10,6 +10,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import deepmerge from 'deepmerge';
 import { equipProps } from '../utils/objectUtils'
+import essentialProps from '../reducers/essentialProps'
 
 class ScatterPlot extends React.Component {
     constructor(props) {
@@ -18,16 +19,15 @@ class ScatterPlot extends React.Component {
     }
 
     propsToCompState(props) {
+        //merge essentialProps with props
+        props = deepmerge(essentialProps.scatter_plot, props);
         // get the plot data from props
         let xArrays = props['xArrays'];
         let yArrays = props['yArrays'];
         let plotColors = props['colors'];
         let plotModes = props['plot_modes'];
         let compiledPlotData = [];
-        let traceNames = [];
-        if (props.names !== undefined && props.names.constructor === Array) {
-            traceNames = props.names;
-        }
+        let traceNames = traceNames = props.names;
         // iterate through the Arrays for plot data
         for (let xDataIter = 0; xDataIter < xArrays.length; xDataIter++) {
             let xData = xArrays[xDataIter];
@@ -58,17 +58,20 @@ class ScatterPlot extends React.Component {
                 compiledPlotData[xDataIter]['name'] = traceNames[xDataIter];
             }
         }
+        
         const defLayout = {
             autosize: true,
             showlegend: true,
             legend: { "orientation": "h" }
         };
-        props = equipProps(props, ['layout', 'config', 'style']);
         const layout = deepmerge.all([defLayout, props.layout]);
+        
         const defConfig = {};
         const config = deepmerge.all([defConfig, props.config]);
+        
         const defStyle = { width: '100%', height: '100%', margin: '0px' };
         const style = deepmerge.all([defStyle, props.style]);
+        
         this.state = { data: compiledPlotData, layout: layout, config: config, style: style };
     }
 

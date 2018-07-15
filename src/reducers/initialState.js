@@ -17,7 +17,6 @@ export default {
                     plot_modes: ['lines', 'lines'],
                     x_headings: ['x', 'x'],
                     y_headings: ['y', 'z'],
-                    colors: ['red', 'yellow'],
                     csv_address: 'http://localhost:8807/sample_1.csv'
                 }
             }
@@ -35,7 +34,6 @@ export default {
             plot_modes: ['lines'],
             x_headings: ['x'],
             y_headings: ['y'],
-            colors: ['red'],
             csv_address: 'http://localhost:8807/sample_1.csv'
         }
     }

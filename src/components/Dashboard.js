@@ -11,9 +11,12 @@ import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
 import { loadCellCSVArray } from '../actions/dashBoardActions'
+import deepmerge from 'deepmerge'
+import essentialProps from '../reducers/essentialProps'
 
 
 const Dashboard = (props) => {
+    props = deepmerge(essentialProps, props);
     return (
         <div className={classNames('container-fluid', { 'dashboard': true })}>
             {/* <span>{JSON.stringify(dashboard)}</span> */}
@@ -28,7 +31,7 @@ const Dashboard = (props) => {
                         <DashboardCell
                             key={cellIndex}
                             cellIndex={cellIndex}
-                            dashboardCell={cell}
+                            cellProps={cell}
                             onCellCSVFetchClick={props.onCellCSVFetchClick}
                         />
                     )
