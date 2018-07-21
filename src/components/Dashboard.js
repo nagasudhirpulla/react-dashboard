@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
-import { loadCellCSVArray } from '../actions/dashBoardActions'
+import { loadCellCSVArray, loadDashboardFromAddress } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'query-string';
@@ -36,8 +36,10 @@ class Dashboard extends React.Component {
 
     handleClick = () => {
         //console.log(this.state.input);
-        this.state.props.history.push(`${this.state.props.match.path}?filepath=${this.state.input}`);
-        window.location.reload();
+        let newFilePath = this.state.input
+        this.state.props.history.push(`${this.state.props.match.path}?filepath=${newFilePath}`);
+        //window.location.reload();
+        this.state.props.onUrlFetchClick(newFilePath);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -87,6 +89,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onCellCSVFetchClick: (key, url, delimiter) => {
             loadCellCSVArray(dispatch, key, url, delimiter);
+        },
+        onUrlFetchClick: (filePath) => {
+            dispatch(loadDashboardFromAddress(filePath));
         }
     };
 };
