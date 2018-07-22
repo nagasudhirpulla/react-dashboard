@@ -17,7 +17,7 @@ export default function dashboardReducer(state = initialState.dashboard, action)
             let targetIndex = action.index;
             if (targetIndex == null || targetIndex > state.dashboard_cells.length || targetIndex < 0) {
                 // add cell at the end if cannot find the adding index
-                targetIndex = state.dashboard_cells.length - 1;
+                targetIndex = state.dashboard_cells.length;
             }
             return {
                 ...state,

@@ -40,6 +40,15 @@ export function setCellCSVArray(cellIndex, csvArray) {
 	return { type: types.EDIT_DASHBOARD_CELL_PROPS, index: cellIndex, editProps: { csvArray: csvArray } };
 }
 
+export function addDashboardCell() {
+	return { type: types.ADD_DASHBOARD_CELL, index: null, cellProps: {} };
+}
+
+export function deleteDashboardCell(index) {
+	return { type: types.DELETE_DASHBOARD_CELL, index: index };
+}
+
+
 export async function updateAllDashboards(dashboardObj, dispatch) {
 	// update the dashboardObj cells with the fetched csvArray
 	for (let i = 0; i < dashboardObj.dashboard_cells.length; i++) {

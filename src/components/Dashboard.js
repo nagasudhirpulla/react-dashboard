@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
-import { loadCellCSVArray, loadDashboardFromAddress } from '../actions/dashBoardActions'
+import { loadCellCSVArray, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'query-string';
@@ -19,7 +19,8 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleGoClick = this.handleGoClick.bind(this);
+        this.addPlotCellClick = this.addPlotCellClick.bind(this);
         let filePath = qs.parse(props.location.search).filepath;
         if (filePath === undefined || filePath === null) {
             filePath = "";
@@ -34,7 +35,11 @@ class Dashboard extends React.Component {
         this.setState({ input: e.target.value });
     }
 
-    handleClick = () => {
+    addPlotCellClick = () => {
+        this.state.props.onAddCellClick();
+    }
+
+    handleGoClick = () => {
         //console.log(this.state.input);
         let newFilePath = this.state.input
         this.state.props.history.push(`${this.state.props.match.path}?filepath=${newFilePath}`);
@@ -47,7 +52,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        let props = deepmerge(essentialProps, this.state.props);
+        let props = deepmerge(essentialProps.dashboard, this.state.props);
         return (
             <div className={classNames('container-fluid', { 'dashboard': true })}>
                 {/* <span>{JSON.stringify(dashboard)}</span> */}
@@ -61,7 +66,8 @@ class Dashboard extends React.Component {
                             style={{ minWidth: '300px' }}
                             defaultValue={this.state.input}
                         />
-                        <button onClick={this.handleClick}>Go!</button>
+                        <button onClick={this.handleGoClick}>Go!</button>
+                        <button onClick={this.addPlotCellClick}>Add Plot Cell</button>
                     </div>
                 </div>
                 <div className={classNames('row', )}>
@@ -71,7 +77,10 @@ class Dashboard extends React.Component {
                                 key={cellIndex}
                                 cellIndex={cellIndex}
                                 cellProps={cell}
+                                history={this.state.props.history}
+                                match={this.state.props.match}
                                 onCellCSVFetchClick={props.onCellCSVFetchClick}
+                                onDeleteCellClick={props.onDeleteCellClick}
                             />
                         )
                     }
@@ -92,6 +101,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         onUrlFetchClick: (filePath) => {
             dispatch(loadDashboardFromAddress(filePath));
+        },
+        onAddCellClick: () => {
+            dispatch(addDashboardCell());
+        },
+        onDeleteCellClick: (index) => {
+            dispatch(deleteDashboardCell(index));
         }
     };
 };

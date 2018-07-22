@@ -10,7 +10,7 @@ import ScatterPlot from './ScatterPlot'
 import classNames from 'classnames';
 import { extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
 import deepmerge from 'deepmerge';
-import essentialProps from '../reducers/essentialProps'
+import essentialProps from '../reducers/essentialProps';
 
 class DashboardCell extends React.Component {
     constructor(props) {
@@ -29,15 +29,25 @@ class DashboardCell extends React.Component {
     }
 
     propsToCompState(props) {
-        // get the essential props
+        this.deleteCellClick = this.deleteCellClick.bind(this);
+        this.editCellClick = this.editCellClick.bind(this);
+        // essential props
         props = deepmerge(essentialProps.dashbard_cell, props);
+        //cell index
+        this.state.cellIndex = props.cellIndex;
+        //delete cell handler
+        this.state.onDeleteCellClick = props.onDeleteCellClick;
+        //history object
+        this.state.history = props.history;
+        //match object
+        this.state.match = props.match;
         // Plot information state
         this.state.cellProps = props.cellProps;
         // Plot container col string like col-sm-6
         this.state.containerColStr = props.cellProps.cell_geometry.cell_col_str;
-        
+
         this.state.cellStyle = { 'minHeight': props.cellProps.cell_geometry.cell_min_height };
-        
+
         // create the plot component
         const cellProps = this.state.cellProps;
         const csvArray = cellProps.plot_props.csvArray;
@@ -50,7 +60,7 @@ class DashboardCell extends React.Component {
             } else if (cellProps.cell_type === 'csv_h_plot') {
                 xArrays = extractCSVHExprColumnsArr(csvArray, cellProps.plot_props.x_headings);
                 yArrays = extractCSVHExprColumnsArr(csvArray, cellProps.plot_props.y_headings);
-            }            
+            }
             // update the plot component
             let cellComponent = <ScatterPlot
                 {...cellProps.plot_props} xArrays={xArrays} yArrays={yArrays}
@@ -63,6 +73,15 @@ class DashboardCell extends React.Component {
         this.propsToCompState(nextProps);
     }
 
+    deleteCellClick = () => {
+        this.state.onDeleteCellClick(this.state.cellIndex);
+    }
+
+    editCellClick = () => {
+        //todo complete this
+        this.state.history.push(`${this.state.match.path}/${this.state.cellIndex}`);
+    }
+
     render() {
         return (
             <div className={classNames(this.state.containerColStr, )} style={this.state.cellContainerStyle}>
@@ -71,6 +90,8 @@ class DashboardCell extends React.Component {
                 <div className={classNames('dashboard_cell', )} style={this.state.cellStyle}>
                     <div className={'dashboard_cell_bar'}>
                         <span>{this.state.cellProps.cell_name}</span>
+                        <button onClick={this.editCellClick}>Edit Cell</button>
+                        <button onClick={this.deleteCellClick}>Delete</button>
                     </div>
                     {/*JSON.stringify(this.state.cellProps.plot_props.csvArray)*/}
                     {this.state.cellComponent}

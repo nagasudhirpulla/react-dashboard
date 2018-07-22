@@ -1,5 +1,7 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
+import essentialProps from './essentialProps'
+import deepmerge from 'deepmerge'
 import {equipDefaultProp, keepSpecifiedPropsOnly} from '../utils/objectUtils';
 
 export default function dashboardCellReducer(state = initialState.dashbard_cell, action) {
@@ -21,14 +23,7 @@ export default function dashboardCellReducer(state = initialState.dashbard_cell,
 }
 
 function createDashboardCell(action) {
-    let initialCell = initialState.dashbard_cell;
-    
-    let cellPropKeys = Object.keys(initialCell);
-    let dashbardCell = keepSpecifiedPropsOnly(action, cellPropKeys);
-
-    for (let i = 0; i < cellPropKeys.length; i++) {
-        dashbardCell = equipDefaultProp(dashbardCell, cellPropKeys[i], initialCell[cellPropKeys[i]]);
-    }
-
+    let essentialState = essentialProps.dashbard_cell.cellProps;
+    let dashbardCell = deepmerge(essentialState, action.cellProps);
     return dashbardCell;
 }
