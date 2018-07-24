@@ -2,11 +2,20 @@
 https://github.com/SophieDeBenedetto/catbook-redux/blob/blog-post/src/routes.js
 */
 import React from 'react';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
-
-export default () => (
+import EditDashboard from '../components/EditDashboard';
+import { ConnectedRouter } from 'connected-react-router'
+/*
   <BrowserRouter>
     <Route path='/' component={Dashboard} />
   </BrowserRouter>
+*/
+export default (props) => (
+  <ConnectedRouter history={props.history}>
+    <Switch>
+      <Route exact path='/' component={Dashboard} />
+      <Route path='/edit/:id' component={EditDashboard} />
+    </Switch>
+  </ConnectedRouter>
 );

@@ -37,10 +37,8 @@ class DashboardCell extends React.Component {
         this.state.cellIndex = props.cellIndex;
         //delete cell handler
         this.state.onDeleteCellClick = props.onDeleteCellClick;
-        //history object
-        this.state.history = props.history;
-        //match object
-        this.state.match = props.match;
+        //edit cell handler
+        this.state.onEditCellClick = props.onEditCellClick;
         // Plot information state
         this.state.cellProps = props.cellProps;
         // Plot container col string like col-sm-6
@@ -78,8 +76,7 @@ class DashboardCell extends React.Component {
     }
 
     editCellClick = () => {
-        //todo complete this
-        this.state.history.push(`${this.state.match.path}/${this.state.cellIndex}`);
+        this.state.onEditCellClick(this.state.cellIndex);
     }
 
     render() {

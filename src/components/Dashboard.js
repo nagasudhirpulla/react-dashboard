@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
-import { loadCellCSVArray, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell } from '../actions/dashBoardActions'
+import { loadCellCSVArray, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'query-string';
@@ -41,6 +41,7 @@ class Dashboard extends React.Component {
 
     handleGoClick = () => {
         //console.log(this.state.input);
+        //todo change this
         let newFilePath = this.state.input
         this.state.props.history.push(`${this.state.props.match.path}?filepath=${newFilePath}`);
         //window.location.reload();
@@ -77,10 +78,9 @@ class Dashboard extends React.Component {
                                 key={cellIndex}
                                 cellIndex={cellIndex}
                                 cellProps={cell}
-                                history={this.state.props.history}
-                                match={this.state.props.match}
                                 onCellCSVFetchClick={props.onCellCSVFetchClick}
                                 onDeleteCellClick={props.onDeleteCellClick}
+                                onEditCellClick={props.onEditCellClick}
                             />
                         )
                     }
@@ -107,6 +107,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         onDeleteCellClick: (index) => {
             dispatch(deleteDashboardCell(index));
+        },
+        onEditCellClick: (index) => {
+            dispatch(editDashboardCell(index));
         }
     };
 };

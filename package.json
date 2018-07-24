@@ -5,6 +5,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "classnames": "^2.2.6",
+    "connected-react-router": "^4.3.0",
     "cors": "^2.8.4",
     "deepmerge": "^2.1.1",
     "expr-eval": "^1.2.2",

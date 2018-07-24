@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
 import { fetchCSVArrayProm, fetchCSVArray } from '../utils/csvUtils';
+import { push } from 'connected-react-router'
 
 export function loadDashboardFromAddress(filePath) {
 	return async function (dispatch) {
@@ -46,6 +47,13 @@ export function addDashboardCell() {
 
 export function deleteDashboardCell(index) {
 	return { type: types.DELETE_DASHBOARD_CELL, index: index };
+}
+
+export function editDashboardCell(index) {
+	return function (dispatch) {
+		//todo implement this
+		dispatch(push(`/edit/${index}`));
+	};
 }
 
 

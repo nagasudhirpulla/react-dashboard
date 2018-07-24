@@ -9,7 +9,6 @@ https://github.com/KyleAMathews/deepmerge
 import React from 'react';
 import Plot from 'react-plotly.js';
 import deepmerge from 'deepmerge';
-import { equipProps } from '../utils/objectUtils'
 import essentialProps from '../reducers/essentialProps'
 
 class ScatterPlot extends React.Component {
@@ -27,7 +26,7 @@ class ScatterPlot extends React.Component {
         let plotColors = props['colors'];
         let plotModes = props['plot_modes'];
         let compiledPlotData = [];
-        let traceNames = traceNames = props.names;
+        let traceNames = props.names;
         // iterate through the Arrays for plot data
         for (let xDataIter = 0; xDataIter < xArrays.length; xDataIter++) {
             let xData = xArrays[xDataIter];

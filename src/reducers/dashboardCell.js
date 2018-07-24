@@ -2,7 +2,6 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 import essentialProps from './essentialProps'
 import deepmerge from 'deepmerge'
-import {equipDefaultProp, keepSpecifiedPropsOnly} from '../utils/objectUtils';
 
 export default function dashboardCellReducer(state = initialState.dashbard_cell, action) {
     switch (action.type) {
