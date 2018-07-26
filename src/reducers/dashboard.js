@@ -33,11 +33,12 @@ export default function dashboardReducer(state = initialState.dashboard, action)
                 // do nothing if we cannot find the editing index
                 return state;
             }
+            const newCell = dashboardCellReducer(state.dashboard_cells[targetIndex], action);
             return {
                 ...state,
                 dashboard_cells: [
                     ...state.dashboard_cells.slice(0, targetIndex),
-                    dashboardCellReducer(state.dashboard_cells[targetIndex], action),
+                    newCell,
                     ...state.dashboard_cells.slice(targetIndex + 1)
                 ]
             };

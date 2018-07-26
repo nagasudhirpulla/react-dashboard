@@ -9,6 +9,7 @@
     "cors": "^2.8.4",
     "deepmerge": "^2.1.1",
     "expr-eval": "^1.2.2",
+    "jsoneditor": "^5.19.0",
     "plotly.js": "^1.39.0",
     "query-string": "^6.1.0",
     "react": "^16.4.1",

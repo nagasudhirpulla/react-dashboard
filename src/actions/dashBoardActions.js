@@ -56,6 +56,17 @@ export function editDashboardCell(index) {
 	};
 }
 
+export function updateDashboardCell(cellIndex, dashboardCell) {
+	return function (dispatch) {
+		dispatch(updateCellAction(cellIndex, dashboardCell));
+	};
+}
+
+export function updateCellAction(cellIndex, dashboardCell) {
+	//console.log(dashboardCell);
+	return { type: types.EDIT_DASHBOARD_CELL_PROPS, index: cellIndex, editProps: dashboardCell };
+}
+
 
 export async function updateAllDashboards(dashboardObj, dispatch) {
 	// update the dashboardObj cells with the fetched csvArray
@@ -67,3 +78,5 @@ export async function updateAllDashboards(dashboardObj, dispatch) {
 	}
 	dispatch(loadDashboard(dashboardObj));
 }
+
+//todo create updateDashboardAt index function

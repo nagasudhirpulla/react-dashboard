@@ -15,7 +15,7 @@ export default function dashboardCellReducer(state = initialState.dashbard_cell,
             return {
                 ...state,
                 ...action.editProps
-            };
+            };            
         default:
             return state;
     }
