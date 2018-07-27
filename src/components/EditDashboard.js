@@ -45,8 +45,8 @@ class EditDashboard extends React.Component {
         const container = document.getElementById('jsoneditor');
         const editor = new jsoneditor(container);
         //set editor json
-        const cellJSON = { ...this.state.props.dashboard_cells[this.getEditCellIndex()] };
-        // todo resolve the issue since it is mutating the props
+        //try to implement cloning using deepmerge or object spread operator
+        const cellJSON = JSON.parse(JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()]));
         cellJSON.plot_props.csvArray = undefined;
         editor.set(cellJSON);
         this.setState({ editor: editor });
