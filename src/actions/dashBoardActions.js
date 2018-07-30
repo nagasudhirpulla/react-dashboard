@@ -57,7 +57,8 @@ export function editDashboardCell(index) {
 }
 
 export function updateDashboardCell(cellIndex, dashboardCell) {
-	return function (dispatch) {
+	return async function (dispatch) {
+		dashboardCell = await updateDashboardCellCSVArray(dashboardCell);
 		dispatch(updateCellAction(cellIndex, dashboardCell));
 	};
 }
@@ -71,12 +72,16 @@ export function updateCellAction(cellIndex, dashboardCell) {
 export async function updateAllDashboards(dashboardObj, dispatch) {
 	// update the dashboardObj cells with the fetched csvArray
 	for (let i = 0; i < dashboardObj.dashboard_cells.length; i++) {
-		let csvUrl = dashboardObj.dashboard_cells[i].plot_props.csv_address;
-		let delimiter = dashboardObj.dashboard_cells[i].plot_props.csv_delimiter;
-		let csvArray = await fetchCSVArrayProm(csvUrl, delimiter);
-		dashboardObj.dashboard_cells[i].plot_props.csvArray = csvArray;
+		dashboardObj.dashboard_cells[i] = await updateDashboardCellCSVArray(dashboardObj.dashboard_cells[i]);
 	}
 	dispatch(loadDashboard(dashboardObj));
 }
 
-//todo create updateDashboardAt index function
+export async function updateDashboardCellCSVArray(dashboardCellObj) {
+	// update the dashboardObj cells with the fetched csvArray
+	let csvUrl = dashboardCellObj.plot_props.csv_address;
+	let delimiter = dashboardCellObj.plot_props.csv_delimiter;
+	let csvArray = await fetchCSVArrayProm(csvUrl, delimiter);
+	dashboardCellObj.plot_props.csvArray = csvArray;
+	return dashboardCellObj;
+}
