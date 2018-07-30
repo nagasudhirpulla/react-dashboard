@@ -81,6 +81,7 @@ class Dashboard extends React.Component {
                                 onCellCSVFetchClick={props.onCellCSVFetchClick}
                                 onDeleteCellClick={props.onDeleteCellClick}
                                 onEditCellClick={props.onEditCellClick}
+                                loadCellCSVArray={props.loadCellCSVArray}
                             />
                         )
                     }
@@ -110,7 +111,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         onEditCellClick: (index) => {
             dispatch(editDashboardCell(index));
-        }
+        },
+        loadCellCSVArray: (index, dashboardCell) => {
+            dispatch(loadCellCSVArray(index, dashboardCell));
+        }        
     };
 };
 

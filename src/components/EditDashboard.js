@@ -43,7 +43,17 @@ class EditDashboard extends React.Component {
     setUpEditorObject = () => {
         // create the editor
         const container = document.getElementById('jsoneditor');
-        const editor = new jsoneditor(container);
+        var options = {
+            mode: 'tree',
+            modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
+            onError: function (err) {
+              alert(err.toString());
+            },
+            onModeChange: function (newMode, oldMode) {
+              //console.log('Mode switched from', oldMode, 'to', newMode);
+            }
+          };
+        const editor = new jsoneditor(container, options);
         //set editor json
         //try to implement cloning using deepmerge or object spread operator
         const cellJSON = JSON.parse(JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()]));

@@ -22,15 +22,20 @@ class DashboardCell extends React.Component {
             cellStyle: {},
             cellContainerStyle: { 'padding': '0px' },
             onCellCSVFetchClick: props.onCellCSVFetchClick,
-            cellIndex: props.cellIndex
+            cellIndex: props.cellIndex,
+            timerId: null
         };
         this.propsToCompState(props);
         //props.onCellCSVFetchClick(props.cellIndex, props.cellProps.plot_props.csv_address, props.cellProps.plot_props.csv_delimiter);
     }
 
     propsToCompState(props) {
+        this.stopCellTimer = this.stopCellTimer.bind(this);
+        this.reAssignCellTimer = this.reAssignCellTimer.bind(this);
+        this.updatePlotData = this.updatePlotData.bind(this);
         this.deleteCellClick = this.deleteCellClick.bind(this);
         this.editCellClick = this.editCellClick.bind(this);
+        
         // essential props
         props = deepmerge(essentialProps.dashbard_cell, props);
         //cell index
@@ -39,6 +44,9 @@ class DashboardCell extends React.Component {
         this.state.onDeleteCellClick = props.onDeleteCellClick;
         //edit cell handler
         this.state.onEditCellClick = props.onEditCellClick;
+
+        this.state.loadCellCSVArray = props.loadCellCSVArray;
+
         // Plot information state
         this.state.cellProps = props.cellProps;
         // Plot container col string like col-sm-6
@@ -65,10 +73,41 @@ class DashboardCell extends React.Component {
             />;
             this.state.cellComponent = cellComponent;
         }
+        // todo if timer is enabled assign the timerId by setInterval
+        this.reAssignCellTimer();
     }
 
     componentWillReceiveProps(nextProps) {
         this.propsToCompState(nextProps);
+    }
+
+    componentWillUnmount(){
+        this.stopCellTimer();
+    }
+
+    stopCellTimer = () => {
+        if (this.state.timerId != null) {
+            // timer is running, hence stop it
+            window.clearInterval(this.state.timerId);
+        }
+    }
+
+    reAssignCellTimer = () => {
+        // stop the timer first
+        this.stopCellTimer();
+        const auto_fetch = this.state.cellProps.auto_fetch;
+        if (auto_fetch.enabled === true) {
+            const timerInterval = auto_fetch.fetch_mins * 60000 + auto_fetch.fetch_secs * 1000;
+            if (timerInterval > 0) {
+                this.state.timerId = window.setInterval(this.updatePlotData, timerInterval);
+            }
+        }
+    }
+
+    updatePlotData = () => {
+        // todo dispatch csv update action
+        console.log(`Timer call from cell ${this.state.cellIndex}`);
+        this.state.loadCellCSVArray(this.state.cellIndex, this.state.cellProps);        
     }
 
     deleteCellClick = () => {
