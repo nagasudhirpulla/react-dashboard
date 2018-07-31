@@ -106,7 +106,7 @@ class DashboardCell extends React.Component {
 
     updatePlotData = () => {
         // dispatch csv update action
-        console.log(`Timer call from cell ${this.state.cellIndex}`);
+        //console.log(`Timer call from cell ${this.state.cellIndex}`);
         this.state.updateDashboardCell(this.state.cellIndex, this.state.cellProps);        
     }
 
