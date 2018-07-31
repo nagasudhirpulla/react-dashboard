@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import classNames from 'classnames';
-import { loadCellCSVArray, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
+import { updateDashboardCell, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'query-string';
@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
                                 onCellCSVFetchClick={props.onCellCSVFetchClick}
                                 onDeleteCellClick={props.onDeleteCellClick}
                                 onEditCellClick={props.onEditCellClick}
-                                loadCellCSVArray={props.loadCellCSVArray}
+                                updateDashboardCell={props.updateDashboardCell}
                             />
                         )
                     }
@@ -97,9 +97,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onCellCSVFetchClick: (key, url, delimiter) => {
-            loadCellCSVArray(dispatch, key, url, delimiter);
-        },
         onUrlFetchClick: (filePath) => {
             dispatch(loadDashboardFromAddress(filePath));
         },
@@ -112,8 +109,8 @@ const mapDispatchToProps = (dispatch) => {
         onEditCellClick: (index) => {
             dispatch(editDashboardCell(index));
         },
-        loadCellCSVArray: (index, dashboardCell) => {
-            dispatch(loadCellCSVArray(index, dashboardCell));
+        updateDashboardCell: (index, dashboardCell) => {
+            dispatch(updateDashboardCell(index, dashboardCell));
         }        
     };
 };

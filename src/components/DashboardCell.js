@@ -45,7 +45,7 @@ class DashboardCell extends React.Component {
         //edit cell handler
         this.state.onEditCellClick = props.onEditCellClick;
 
-        this.state.loadCellCSVArray = props.loadCellCSVArray;
+        this.state.updateDashboardCell = props.updateDashboardCell;
 
         // Plot information state
         this.state.cellProps = props.cellProps;
@@ -96,7 +96,7 @@ class DashboardCell extends React.Component {
         // stop the timer first
         this.stopCellTimer();
         const auto_fetch = this.state.cellProps.auto_fetch;
-        if (auto_fetch.enabled === true) {
+        if (auto_fetch.enabled == true) {
             const timerInterval = auto_fetch.fetch_mins * 60000 + auto_fetch.fetch_secs * 1000;
             if (timerInterval > 0) {
                 this.state.timerId = window.setInterval(this.updatePlotData, timerInterval);
@@ -105,9 +105,9 @@ class DashboardCell extends React.Component {
     }
 
     updatePlotData = () => {
-        // todo dispatch csv update action
+        // dispatch csv update action
         console.log(`Timer call from cell ${this.state.cellIndex}`);
-        this.state.loadCellCSVArray(this.state.cellIndex, this.state.cellProps);        
+        this.state.updateDashboardCell(this.state.cellIndex, this.state.cellProps);        
     }
 
     deleteCellClick = () => {

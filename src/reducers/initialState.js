@@ -18,6 +18,11 @@ export default {
                     x_headings: ['x', 'x'],
                     y_headings: ['y', 'z'],
                     csv_address: 'http://localhost:8807/sample_1.csv'
+                },
+                auto_fetch:{
+                    enabled: false,
+                    fetch_mins: 0,
+                    fetch_secs: 0
                 }
             }
         ]
