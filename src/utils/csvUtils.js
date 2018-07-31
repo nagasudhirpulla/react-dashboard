@@ -4,7 +4,7 @@ https://stackoverflow.com/questions/33476882/node-callback-to-promise-with-async
 */
 import { get } from 'request';
 import { waterfall } from 'async';
-import { parseVariables } from './exprUtils'
+import { parseVariables, replaceOperators } from './exprUtils'
 
 export function fetchCSVArray(csvUrl, delimiter = ',', callback) {
     get(csvUrl, function (error, response, body) {
@@ -165,6 +165,9 @@ export function extractCSVExprColumnsArr(csvArray, columnNames) {
     // get the array headers
     let arrayHeaders = csvArray[0];
 
+    // replace the mathematical operators with _
+    arrayHeaders = replaceOperators(arrayHeaders, '_');
+
     for (let i = 0; i < columnNames.length; i++) {
         // extract the headers required from the columnName
         let res = parseVariables(columnNames[i]);
@@ -231,6 +234,10 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
     for (let i = 0; i < csvArray.length; i++) {
         arrayHeaders.push(csvArray[i][0]);
     }
+
+    // replace the mathematical operators with _
+    arrayHeaders = replaceOperators(arrayHeaders, '_');
+
 
     for (let i = 0; i < columnNames.length; i++) {
         // extract the headers required from the columnName
