@@ -1,0 +1,22 @@
+{
+    "dashboard_name": "First Dashboard",
+    "dashboard_cells": [
+        {
+            "cell_name": "Test Cell",
+            "cell_type": "csv_h_plot",
+            "cell_geometry": {
+                "cell_col_str": "col-sm-12",
+                "cell_min_width": "0px",
+                "cell_min_height": "100px"
+            },
+            "plot_props": {
+                "plot_modes": ["lines"],
+                "x_headings": ["TIMEBLOCK", "TIMEBLOCK", "TIMEBLOCK", "TIMEBLOCK"],
+                "y_headings": ["WR_NR_TTC", "WR_NR_ATC", "-NR_TOTAL", "50*KAWAS_APM_ISGS"],
+                "colors": ["green", "yellow", "red"],
+                "csv_address": "http://localhost:8807/scada.txt",
+                "csv_delimiter": "   "
+            }
+        }
+    ]
+}
