@@ -21,6 +21,7 @@ class Dashboard extends React.Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleGoClick = this.handleGoClick.bind(this);
+        this.handleSaveOverrideChkbxChange = this.handleSaveOverrideChkbxChange.bind(this);
         this.addPlotCellClick = this.addPlotCellClick.bind(this);
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
@@ -30,7 +31,7 @@ class Dashboard extends React.Component {
             filePath = "";
         }
         // Don't call this.setState() here!
-        this.state = { input: filePath, showModal: false };
+        this.state = { input: filePath, showModal: false, saveOverride: false };
         this.state.props = props;
         this.state.filePath = filePath;
         this.dashBoardNameInput = React.createRef();
@@ -44,8 +45,26 @@ class Dashboard extends React.Component {
         this.setState({ showModal: false });
     }
 
-    saveDashBoard = () => {
-        alert(`Saving Dashboard as ${this.dashBoardNameInput.current.value}...`);
+    saveDashBoard = async () => {
+        //alert(`Saving Dashboard as ${this.dashBoardNameInput.current.value} with override ${this.state.saveOverride}...`);
+        // derive the dashboard json,strip off csv arrays and then store it
+        const props = deepmerge(essentialProps.dashboard, this.state.props);
+        const dashboardExpObj = JSON.parse(JSON.stringify(props.dashboard));
+        // make csvArray as undefined of all the dashboard cells
+        for (let cellIndex = 0; cellIndex < dashboardExpObj.dashboard_cells.length; cellIndex++) {
+            dashboardExpObj.dashboard_cells[cellIndex].plot_props['csvArray'] = undefined;
+        }
+        let respObj;
+        if (window.confirm("Are you sure to save the Dashbaord to the file server?")) {
+           respObj = await this.saveDasboardAsync(this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
+        }
+        
+        if(respObj.success === true){
+            alert('Dashboard saved successfully in server!');
+        }else{
+            alert(`file was not saved due to ${respObj.message}`);
+        }
+        // todo change the dashboard url
     }
 
     handleChange = (e) => {
@@ -54,6 +73,36 @@ class Dashboard extends React.Component {
 
     addPlotCellClick = () => {
         this.state.props.onAddCellClick();
+    }
+
+    handleSaveOverrideChkbxChange = (event) => {
+        this.setState({ saveOverride: event.target.checked });
+    }
+
+    async saveDasboardAsync(filename, rewrite, jsonObj) {
+        try {
+            const resp = await fetch('http://localhost:8807/api/dashboards/create', {
+                method: 'post',
+                headers: { 
+                    "accept": "application/json",
+                    "accept-encoding": "gzip, deflate",
+                    "accept-language": "en-US,en;q=0.8",
+                    "content-type": "application/json",
+                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36" 
+                },
+                body: JSON.stringify({
+                    "filename": filename,
+                    "rewrite": rewrite,
+                    "file_stuff": JSON.stringify(jsonObj)
+                })
+            });
+            const respJSON = await resp.json();
+            console.log(respJSON);
+            return respJSON;
+        } catch (e) {
+            console.log(e);
+            return { success:false, message:`Could not save due to error ${JSON.stringify(e)}`};
+        }
     }
 
     handleGoClick = () => {
@@ -92,7 +141,7 @@ class Dashboard extends React.Component {
                             <div>
                                 <input type='text' ref={this.dashBoardNameInput} />
                             </div>
-                            <label><input type="checkbox" checked />Override</label>
+                            <label><input type="checkbox" onChange={this.handleSaveOverrideChkbxChange} />Override</label>
                             <br />
                             <button onClick={this.saveDashBoard}>Save Dashboard</button>
                         </Modal>

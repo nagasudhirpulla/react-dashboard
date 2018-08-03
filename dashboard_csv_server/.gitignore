@@ -2,3 +2,9 @@
 
 # dependencies
 /node_modules
+
+# exclude everything
+dashboards/*
+
+# exception to the rule
+!dashboards/.gitkeep 
