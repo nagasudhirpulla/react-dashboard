@@ -11,7 +11,7 @@ import { createBrowserHistory } from 'history'
 import configureStore from './store/index';
 import { loadDashboardFromAddress, updateStoreDashboards } from './actions/dashBoardActions'
 import registerServiceWorker from './registerServiceWorker';
-import qs from 'query-string';
+import qs from 'qs';
 
 let filePath = qs.parse(window.location.search).filepath;
 //console.log(filePath);

@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { updateDashboardCell, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
-import qs from 'query-string';
+import qs from 'qs';
 
 class Dashboard extends React.Component {
     constructor(props) {
