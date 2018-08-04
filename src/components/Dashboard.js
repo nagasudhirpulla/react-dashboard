@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
                             </div>
                             <label><input type="checkbox" onChange={this.handleSaveOverrideChkbxChange} />Override</label>
                             <br />
-                            <button onClick={this.saveDashBoard}>Save Dashboard</button>
+                            <button className={classNames('btn', 'btn-primary')} onClick={this.saveDashBoard}>Save Dashboard</button>
                         </Modal>
                         <button onClick={this.showModal}>Save Dashboard</button>
                     </div>
