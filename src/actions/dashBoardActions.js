@@ -7,7 +7,7 @@ export function loadDashboardFromAddress(filePath) {
 		try {
 			const resp = await fetch(filePath);
 			const dashboardObj = await resp.json();
-			await updateAllDashboards(dashboardObj, dispatch);
+			await updateAllDashboardCells(dashboardObj, dispatch);
 		} catch (e) {
 			console.log(e);
 		}
@@ -17,7 +17,7 @@ export function loadDashboardFromAddress(filePath) {
 export function updateStoreDashboards(dashboardObj) {
 	return async function (dispatch) {
 		try {
-			await updateAllDashboards(dashboardObj, dispatch);
+			await updateAllDashboardCells(dashboardObj, dispatch);
 		} catch (e) {
 			console.log(e);
 		}
@@ -69,10 +69,13 @@ export function updateCellAction(cellIndex, dashboardCell) {
 }
 
 
-export async function updateAllDashboards(dashboardObj, dispatch) {
+export async function updateAllDashboardCells(dashboardObj, dispatch) {
 	// update the dashboardObj cells with the fetched csvArray
 	for (let i = 0; i < dashboardObj.dashboard_cells.length; i++) {
-		dashboardObj.dashboard_cells[i] = await updateDashboardCellCSVArray(dashboardObj.dashboard_cells[i]);
+		if (['csv_plot', 'csv_h_plot'].indexOf(dashboardObj.dashboard_cells[i].cell_type) > -1) {
+			dashboardObj.dashboard_cells[i] = await updateDashboardCellCSVArray(dashboardObj.dashboard_cells[i]);
+		}
+		// handle other cell types like api cell fetching here
 	}
 	dispatch(loadDashboard(dashboardObj));
 }
@@ -80,14 +83,14 @@ export async function updateAllDashboards(dashboardObj, dispatch) {
 export async function updateDashboardCellCSVArray(dashboardCellObj) {
 	// update the dashboardObj cells with the fetched csvArray
 	const csvArray = await getDashboardCellCSVArray(dashboardCellObj)
-	dashboardCellObj.plot_props.csvArray = csvArray;
+	dashboardCellObj.csv_plot_props.csvArray = csvArray;
 	return dashboardCellObj;
 }
 
 export async function getDashboardCellCSVArray(dashboardCellObj) {
 	// update the dashboardObj cells with the fetched csvArray
-	const csvUrl = dashboardCellObj.plot_props.csv_address;
-	const delimiter = dashboardCellObj.plot_props.csv_delimiter;
+	const csvUrl = dashboardCellObj.csv_plot_props.csv_address;
+	const delimiter = dashboardCellObj.csv_plot_props.csv_delimiter;
 	const csvArray = await fetchCSVArrayProm(csvUrl, delimiter);
 	return csvArray;
 }

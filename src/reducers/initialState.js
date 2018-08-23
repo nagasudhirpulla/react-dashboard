@@ -13,7 +13,7 @@ export default {
                     cell_min_width: '0px',
                     cell_min_height: '100px'
                 },
-                plot_props: {
+                csv_plot_props: {
                     plot_modes: ['lines', 'lines'],
                     x_headings: ['x', 'x'],
                     y_headings: ['y', 'z'],
@@ -35,7 +35,7 @@ export default {
             cell_min_width: '0px',
             cell_min_height: '100px'
         },
-        plot_props: {
+        csv_plot_props: {
             plot_modes: ['lines'],
             x_headings: ['x'],
             y_headings: ['y'],

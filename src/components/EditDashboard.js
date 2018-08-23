@@ -14,6 +14,7 @@ import jsoneditor from 'jsoneditor';
 import './jsoneditor/jsoneditor.min.css';
 import classNames from 'classnames';
 import './EditDashboard.css';
+import essentialProps from '../reducers/essentialProps'
 
 class EditDashboard extends React.Component {
     constructor(props) {
@@ -47,17 +48,25 @@ class EditDashboard extends React.Component {
             mode: 'tree',
             modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
             onError: function (err) {
-              alert(err.toString());
+                alert(err.toString());
             },
             onModeChange: function (newMode, oldMode) {
-              //console.log('Mode switched from', oldMode, 'to', newMode);
+                //console.log('Mode switched from', oldMode, 'to', newMode);
             }
-          };
+        };
         const editor = new jsoneditor(container, options);
         //set editor json
         //try to implement cloning using deepmerge or object spread operator
         const cellJSON = JSON.parse(JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()]));
-        cellJSON.plot_props.csvArray = undefined;
+        // remove csvArray for editing
+        if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON.cell_type) > -1) {
+            if (cellJSON.csv_plot_props == undefined) {
+                cellJSON.csv_plot_props = essentialProps.csv_plot_props;
+            }
+            cellJSON.csv_plot_props.csvArray = undefined;
+            editor.set(cellJSON);
+            this.setState({ editor: editor });
+        }
         editor.set(cellJSON);
         this.setState({ editor: editor });
     }
@@ -67,7 +76,10 @@ class EditDashboard extends React.Component {
             const newDashboardCellObj = this.state.editor.get();
             const cellIndex = this.getEditCellIndex()
             const cellJSON = { ...this.state.props.dashboard_cells[cellIndex] };
-            newDashboardCellObj.plot_props.csvArray = cellJSON.plot_props.csvArray;
+            //restore csvArray of the cell
+            if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON) > -1) {
+                newDashboardCellObj.csv_plot_props.csvArray = cellJSON.csv_plot_props.csvArray;
+            }
             //console.log(newDashboardCellObj);
             this.props.onUpdateCellClick(cellIndex, newDashboardCellObj);
         }
@@ -76,21 +88,21 @@ class EditDashboard extends React.Component {
     render() {
         return (
             <div className={classNames('container-fluid', { 'dashboard': true })}>
-                <div className={classNames('row', )}>
-                    <div className={classNames('col-md-12', )}>
+                <div className={classNames('row')}>
+                    <div className={classNames('col-md-12')}>
                         <span>Welcome to edit screen of cell index {`${this.getEditCellIndex()}`}!</span>
                     </div>
                 </div>
 
-                <div className={classNames('row', )}>
-                    <div className={classNames('col-md-6', )}>
+                <div className={classNames('row')}>
+                    <div className={classNames('col-md-6')}>
                         {/*<p>{JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()])}</p>*/}
                         <div id="jsoneditor" className={classNames('jsoneditor_div')}></div>
                     </div>
                 </div>
 
-                <div className={classNames('row', )}>
-                    <div className={classNames('col-md-6', )}>
+                <div className={classNames('row')}>
+                    <div className={classNames('col-md-6')}>
                         <button onClick={this.updateCellClick}>Update the Cell</button>
                     </div>
                 </div>

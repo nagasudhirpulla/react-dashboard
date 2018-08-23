@@ -22,14 +22,20 @@ export default {
                 cell_col_str: 'col-sm-12',
                 cell_min_width: '0px',
                 cell_min_height: '100px'
-            },
+            }/*,
             plot_props: {
                 csvArray: [],
                 x_headings: [],
                 y_headings: [],
                 csv_address: 'http://localhost:8807/sample_1.csv'
-            }
+            }*/
         }
+    },
+    csv_plot_props: {
+        csvArray: [],
+        x_headings: [],
+        y_headings: [],
+        csv_address: 'http://localhost:8807/sample_1.csv'
     },
     scatter_plot: {
         xArrays: [],

@@ -52,7 +52,10 @@ class Dashboard extends React.Component {
         const dashboardExpObj = JSON.parse(JSON.stringify(props.dashboard));
         // make csvArray as undefined of all the dashboard cells
         for (let cellIndex = 0; cellIndex < dashboardExpObj.dashboard_cells.length; cellIndex++) {
-            dashboardExpObj.dashboard_cells[cellIndex].plot_props['csvArray'] = undefined;
+            //stub
+            if (['csv_plot', 'csv_h_plot'].indexOf(dashboardExpObj.dashboard_cells[cellIndex].cell_type) > -1) {
+                dashboardExpObj.dashboard_cells[cellIndex].csv_plot_props['csvArray'] = undefined;
+            }            
         }
         let respObj;
         if (window.confirm("Are you sure to save the Dashbaord to the file server?")) {
