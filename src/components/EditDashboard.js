@@ -60,7 +60,7 @@ class EditDashboard extends React.Component {
         const cellJSON = JSON.parse(JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()]));
         // remove csvArray for editing
         if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON.cell_type) > -1) {
-            if (cellJSON.csv_plot_props == undefined) {
+            if (cellJSON.csv_plot_props === undefined) {
                 cellJSON.csv_plot_props = essentialProps.csv_plot_props;
             }
             cellJSON.csv_plot_props.csvArray = undefined;
