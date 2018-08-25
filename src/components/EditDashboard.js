@@ -15,6 +15,7 @@ import './jsoneditor/jsoneditor.min.css';
 import classNames from 'classnames';
 import './EditDashboard.css';
 import essentialProps from '../reducers/essentialProps'
+import * as cellTypes from '../actions/cellTypes'
 
 class EditDashboard extends React.Component {
     constructor(props) {
@@ -58,14 +59,17 @@ class EditDashboard extends React.Component {
         //set editor json
         //try to implement cloning using deepmerge or object spread operator
         const cellJSON = JSON.parse(JSON.stringify(this.state.props.dashboard_cells[this.getEditCellIndex()]));
+        cellJSON.data = undefined;
         // remove csvArray for editing
         if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON.cell_type) > -1) {
             if (cellJSON.csv_plot_props === undefined) {
                 cellJSON.csv_plot_props = essentialProps.csv_plot_props;
             }
             cellJSON.csv_plot_props.csvArray = undefined;
-            editor.set(cellJSON);
-            this.setState({ editor: editor });
+        } else if ([cellTypes.psp_api_plot].indexOf(cellJSON.cell_type) > -1) {
+            if (cellJSON.psp_api_plot_props === undefined) {
+                cellJSON.psp_api_plot_props = essentialProps.psp_api_plot_props;
+            }
         }
         editor.set(cellJSON);
         this.setState({ editor: editor });
@@ -80,6 +84,8 @@ class EditDashboard extends React.Component {
             if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON) > -1) {
                 newDashboardCellObj.csv_plot_props.csvArray = cellJSON.csv_plot_props.csvArray;
             }
+            //restore cell data
+            newDashboardCellObj.data = cellJSON.data;
             //console.log(newDashboardCellObj);
             this.props.onUpdateCellClick(cellIndex, newDashboardCellObj);
         }

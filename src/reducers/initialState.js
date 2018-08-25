@@ -23,7 +23,8 @@ export default {
                     enabled: false,
                     fetch_mins: 0,
                     fetch_secs: 0
-                }
+                },
+                data: {}
             }
         ]
     },
@@ -40,6 +41,7 @@ export default {
             x_headings: ['x'],
             y_headings: ['y'],
             csv_address: 'http://localhost:8807/sample_1.csv'
-        }
+        },
+        data: {}
     }
 }

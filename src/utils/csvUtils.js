@@ -293,3 +293,68 @@ export async function fetchCSVArrayProm(csvUrl, delimiter = ',') {
         return [];
     }
 }
+
+export async function fetchPspLabelData(dataUrl) {
+    try {
+        const resp = await fetch(dataUrl);
+        //console.log(resp);
+        const jsonResp = await resp.json();
+        //console.log(jsonResp);
+        let result = {};
+        if (jsonResp.tableColNames === undefined || jsonResp.tableColTypes === undefined || jsonResp.tableRows === undefined) {
+            return { xVals: [], yVals: [], xLabels: [] };
+        }
+        // we assume that the first column is timestamp
+        result.names = jsonResp.tableColNames;
+        let xVals = [];
+        let yVals = [];
+        let xLabels = [];
+        for (let rowIter = 0; rowIter < jsonResp.tableRows.length; rowIter++) {
+            const row = jsonResp.tableRows[rowIter];
+            xVals[rowIter] = rowIter;
+            xLabels[rowIter] = row[0];
+            yVals[rowIter] = row[1];
+        }
+        result.xVals = xVals;
+        result.yVals = yVals;
+        result.xLabels = xLabels;
+        return result;
+    } catch (e) {
+        console.log(e);
+        return {};
+    }
+}
+
+export function calculatePspRequesTime(modeStr, dayInt, monthInt, yearInt) {
+    let resTime;
+    if (modeStr === 'absolute') {
+        resTime = new Date(yearInt, monthInt - 1, dayInt);
+    } else {
+        // we consider variable date
+        const nowTime = new Date();
+        const nowMonth = nowTime.getMonth();
+        const nowYear = nowTime.getFullYear();
+        resTime = new Date();
+        resTime.setMonth(nowMonth + monthInt);
+        resTime.setFullYear(nowYear + yearInt);
+        const resMs = resTime.getTime() + 86400000 * dayInt;
+        resTime = new Date(resMs);
+    }
+    return resTime;
+}
+
+export function getPspRequesTimeStr(timeObj) {
+    let resTimeStr;
+    const fullYearStr = timeObj.getFullYear();
+    const monthStr = ensureTwoDigits(timeObj.getMonth() + 1);
+    const dateStr = ensureTwoDigits(timeObj.getDate());
+    resTimeStr = fullYearStr + monthStr + dateStr;
+    return resTimeStr;
+}
+
+function ensureTwoDigits(inpNum) {
+    if (!isNaN(inpNum) && inpNum < 10) {
+        return '0' + inpNum;
+    }
+    return inpNum;
+}

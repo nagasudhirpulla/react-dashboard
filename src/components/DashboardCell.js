@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { extractCSVExprColumnsArr, extractCSVHExprColumnsArr } from '../utils/csvUtils';
 import deepmerge from 'deepmerge';
 import essentialProps from '../reducers/essentialProps';
+import * as cellTypes from '../actions/cellTypes';
 
 class DashboardCell extends React.Component {
     constructor(props) {
@@ -40,10 +41,15 @@ class DashboardCell extends React.Component {
         props = deepmerge(essentialProps.dashbard_cell, props);
         //stub give essential plot props as per the cell type
         if (['csv_plot', 'csv_h_plot'].indexOf(props.cellProps.cell_type) > -1) {
-            if(props.cellProps.csv_plot_props == undefined){
+            if (props.cellProps.csv_plot_props === undefined) {
                 props.cellProps.csv_plot_props = {};
             }
             props.cellProps.csv_plot_props = deepmerge(essentialProps.csv_plot_props, props.cellProps.csv_plot_props);
+        } else if ([cellTypes.psp_api_plot].indexOf(props.cellProps.cell_type) > -1) {
+            if (props.cellProps.psp_api_plot_props === undefined) {
+                props.cellProps.psp_api_plot_props = {};
+            }
+            props.cellProps.psp_api_plot_props = deepmerge(essentialProps.psp_api_plot_props, props.cellProps.psp_api_plot_props);   
         }
         //cell index
         this.state.cellIndex = props.cellIndex;
@@ -79,6 +85,20 @@ class DashboardCell extends React.Component {
                 {...cellProps.csv_plot_props} xArrays={xArrays} yArrays={yArrays}
             />;
             this.state.cellComponent = cellComponent;
+        } else if ([cellTypes.psp_api_plot].indexOf(cellProps.cell_type) > -1) {
+            const cellData = cellProps.data;
+            //set the plot component xArrays and yArrays
+            let xArrays = cellData.xArrays;
+            let yArrays = cellData.yArrays;
+            let xLabelArrays = cellData.xLabelArrays;
+            let x_headings = cellData.xHeadings;
+            let y_headings = cellData.yHeadings;
+            let otherProps = {xArrays, yArrays, xLabelArrays, x_headings, y_headings};
+            // update the plot component
+            let cellComponent = <ScatterPlot
+                {...cellProps.psp_api_plot_props} {...otherProps}
+            />;
+            this.state.cellComponent = cellComponent;
         }
         // todo if timer is enabled assign the timerId by setInterval
         this.reAssignCellTimer();
@@ -103,7 +123,7 @@ class DashboardCell extends React.Component {
         // stop the timer first
         this.stopCellTimer();
         const auto_fetch = this.state.cellProps.auto_fetch;
-        if (auto_fetch.enabled == true) {
+        if (auto_fetch.enabled === true) {
             const timerInterval = auto_fetch.fetch_mins * 60000 + auto_fetch.fetch_secs * 1000;
             if (timerInterval > 0) {
                 this.state.timerId = window.setInterval(this.updatePlotData, timerInterval);
