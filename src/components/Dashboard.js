@@ -11,7 +11,7 @@ import DashboardCell from './DashboardCell';
 import './Dashboard.css';
 import Modal from './Modal'
 import classNames from 'classnames';
-import { updateDashboardCell, loadDashboardFromAddress, addDashboardCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
+import { updateDashboardCell, loadDashboardFromAddress, addDashboardCell, addPSPPlotCell, deleteDashboardCell, editDashboardCell } from '../actions/dashBoardActions'
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'qs';
@@ -23,6 +23,7 @@ class Dashboard extends React.Component {
         this.handleGoClick = this.handleGoClick.bind(this);
         this.handleSaveOverrideChkbxChange = this.handleSaveOverrideChkbxChange.bind(this);
         this.addPlotCellClick = this.addPlotCellClick.bind(this);
+        this.addPSPPlotCellClick = this.addPSPPlotCellClick.bind(this);        
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.saveDashBoard = this.saveDashBoard.bind(this);
@@ -77,6 +78,10 @@ class Dashboard extends React.Component {
     addPlotCellClick = () => {
         this.state.props.onAddCellClick();
     }
+
+    addPSPPlotCellClick = () => {
+        this.state.props.addPSPPlotCellClick();
+    }    
 
     handleSaveOverrideChkbxChange = (event) => {
         this.setState({ saveOverride: event.target.checked });
@@ -137,7 +142,8 @@ class Dashboard extends React.Component {
                             defaultValue={this.state.input}
                         />
                         <button onClick={this.handleGoClick}>Go!</button>
-                        <button onClick={this.addPlotCellClick}>Add Plot Cell</button>
+                        <button onClick={this.addPlotCellClick}>Add CSV Plot Cell</button>
+                        <button onClick={this.addPSPPlotCellClick}>Add PSP Plot Cell</button>
                         <Modal show={this.state.showModal} handleClose={this.hideModal} >
                             <h2>Enter the Dashboard name</h2>
                             <br />
@@ -182,6 +188,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         onAddCellClick: () => {
             dispatch(addDashboardCell());
+        },
+        addPSPPlotCellClick: () => {
+            dispatch(addPSPPlotCell());
         },
         onDeleteCellClick: (index) => {
             dispatch(deleteDashboardCell(index));

@@ -13,7 +13,7 @@ export default function dashboardReducer(state = initialState.dashboard, action)
         case types.FETCH_DASHBOARD_CSVS:
             //stub    
             return state;
-        case types.ADD_DASHBOARD_CELL:
+        case (types.ADD_DASHBOARD_CELL && types.ADD_DASHBOARD_CELL_PSP):
             let targetIndex = action.index;
             if (targetIndex == null || targetIndex > state.dashboard_cells.length || targetIndex < 0) {
                 // add cell at the end if cannot find the adding index

@@ -48,6 +48,10 @@ export function addDashboardCell() {
 	return { type: types.ADD_DASHBOARD_CELL, index: null, cellProps: {} };
 }
 
+export function addPSPPlotCell() {
+	return { type: types.ADD_DASHBOARD_CELL_PSP, index: null, cellProps: {} };
+}
+
 export function deleteDashboardCell(index) {
 	return { type: types.DELETE_DASHBOARD_CELL, index: index };
 }
