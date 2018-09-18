@@ -15,6 +15,8 @@ import { updateDashboardCell, loadDashboardFromAddress, addDashboardCell, addPSP
 import deepmerge from 'deepmerge'
 import essentialProps from '../reducers/essentialProps'
 import qs from 'qs';
+import * as cellTypes from '../actions/cellTypes';
+import { checkNested } from '../utils/objectUtils';
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -23,7 +25,7 @@ class Dashboard extends React.Component {
         this.handleGoClick = this.handleGoClick.bind(this);
         this.handleSaveOverrideChkbxChange = this.handleSaveOverrideChkbxChange.bind(this);
         this.addPlotCellClick = this.addPlotCellClick.bind(this);
-        this.addPSPPlotCellClick = this.addPSPPlotCellClick.bind(this);        
+        this.addPSPPlotCellClick = this.addPSPPlotCellClick.bind(this);
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.saveDashBoard = this.saveDashBoard.bind(this);
@@ -53,19 +55,22 @@ class Dashboard extends React.Component {
         const dashboardExpObj = JSON.parse(JSON.stringify(props.dashboard));
         // make csvArray as undefined of all the dashboard cells
         for (let cellIndex = 0; cellIndex < dashboardExpObj.dashboard_cells.length; cellIndex++) {
-            //stub
             if (['csv_plot', 'csv_h_plot'].indexOf(dashboardExpObj.dashboard_cells[cellIndex].cell_type) > -1) {
-                dashboardExpObj.dashboard_cells[cellIndex].csv_plot_props['csvArray'] = undefined;
-            }            
+                if (checkNested(dashboardExpObj.dashboard_cells[cellIndex], 'csv_plot_props', 'csvArray')) {
+                    dashboardExpObj.dashboard_cells[cellIndex].csv_plot_props['csvArray'] = undefined;
+                }
+            } else if ([cellTypes.psp_api_plot].indexOf(dashboardExpObj.dashboard_cells[cellIndex].cell_type) > -1) {
+                dashboardExpObj.dashboard_cells[cellIndex].data = undefined;
+            }
         }
         let respObj;
         if (window.confirm("Are you sure to save the Dashbaord to the file server?")) {
-           respObj = await this.saveDasboardAsync(this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
+            respObj = await this.saveDasboardAsync(this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
         }
-        
-        if(respObj.success === true){
+
+        if (respObj.success === true) {
             alert('Dashboard saved successfully in server!');
-        }else{
+        } else {
             alert(`file was not saved due to ${respObj.message}`);
         }
         // todo change the dashboard url
@@ -81,7 +86,7 @@ class Dashboard extends React.Component {
 
     addPSPPlotCellClick = () => {
         this.state.props.addPSPPlotCellClick();
-    }    
+    }
 
     handleSaveOverrideChkbxChange = (event) => {
         this.setState({ saveOverride: event.target.checked });
@@ -91,12 +96,12 @@ class Dashboard extends React.Component {
         try {
             const resp = await fetch('http://localhost:8807/api/dashboards/create', {
                 method: 'post',
-                headers: { 
+                headers: {
                     "accept": "application/json",
                     "accept-encoding": "gzip, deflate",
                     "accept-language": "en-US,en;q=0.8",
                     "content-type": "application/json",
-                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36" 
+                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) advanced-rest-client/12.1.3 Chrome/58.0.3029.110 Electron/1.7.12 Safari/537.36"
                 },
                 body: JSON.stringify({
                     "filename": filename,
@@ -109,7 +114,7 @@ class Dashboard extends React.Component {
             return respJSON;
         } catch (e) {
             console.log(e);
-            return { success:false, message:`Could not save due to error ${JSON.stringify(e)}`};
+            return { success: false, message: `Could not save due to error ${JSON.stringify(e)}` };
         }
     }
 
@@ -132,7 +137,7 @@ class Dashboard extends React.Component {
             <div className={classNames('container-fluid', { 'dashboard': true })}>
                 {/* <span>{JSON.stringify(dashboard)}</span> */}
                 {/* <span>{JSON.stringify(onDashBoardFetchClick())}</span> */}
-                <div className={classNames('row', )}>
+                <div className={classNames('row')}>
                     <div className={classNames('col-md-12', 'dashboard_bar')}>
                         <span>{props.dashboard.dashboard_name}</span>
                         <input
@@ -157,7 +162,7 @@ class Dashboard extends React.Component {
                         <button onClick={this.showModal}>Save Dashboard</button>
                     </div>
                 </div>
-                <div className={classNames('row', )}>
+                <div className={classNames('row')}>
                     {
                         props.dashboard.dashboard_cells.map((cell, cellIndex) =>
                             <DashboardCell

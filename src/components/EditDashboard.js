@@ -14,8 +14,9 @@ import jsoneditor from 'jsoneditor';
 import './jsoneditor/jsoneditor.min.css';
 import classNames from 'classnames';
 import './EditDashboard.css';
-import essentialProps from '../reducers/essentialProps'
-import * as cellTypes from '../actions/cellTypes'
+import essentialProps from '../reducers/essentialProps';
+import * as cellTypes from '../actions/cellTypes';
+import { checkNested } from '../utils/objectUtils';
 
 class EditDashboard extends React.Component {
     constructor(props) {
@@ -81,13 +82,34 @@ class EditDashboard extends React.Component {
             const cellIndex = this.getEditCellIndex()
             const cellJSON = { ...this.state.props.dashboard_cells[cellIndex] };
             //restore csvArray of the cell
-            if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON) > -1) {
-                newDashboardCellObj.csv_plot_props.csvArray = cellJSON.csv_plot_props.csvArray;
+            if (['csv_plot', 'csv_h_plot'].indexOf(cellJSON.cell_type) > -1) {
+                if (checkNested(newDashboardCellObj, 'csv_plot_props', 'csvArray')) {
+                    newDashboardCellObj.csv_plot_props.csvArray = cellJSON.csv_plot_props.csvArray;
+                }
             }
-            //restore cell data
-            newDashboardCellObj.data = cellJSON.data;
+            else if ([cellTypes.psp_api_plot].indexOf(cellJSON.cell_type) > -1) {
+                //restore cell data
+                newDashboardCellObj.data = cellJSON.data;
+            }
             //console.log(newDashboardCellObj);
             this.props.onUpdateCellClick(cellIndex, newDashboardCellObj);
+        }
+    }
+
+    addPSPMeasClick = () => {
+        const newDashboardCellObj = this.state.editor.get();
+        // check if dashboardcell is psp api cell
+        if (newDashboardCellObj.cell_type == cellTypes.psp_api_plot) {
+            //check if cell has the psp_api_plot_props.measurements prop
+            if (checkNested(newDashboardCellObj, 'psp_api_plot_props', 'measurements')) {
+                newDashboardCellObj.psp_api_plot_props.measurements.push(essentialProps.psp_api_measurement);
+                this.state.editor.set(newDashboardCellObj);
+            }
+            else {
+                alert('looks like there is some problem in cell configuration object');
+            }
+        } else {
+            alert('Current cell is not a psp api cell');
         }
     }
 
@@ -96,7 +118,8 @@ class EditDashboard extends React.Component {
             <div className={classNames('container-fluid', { 'dashboard': true })}>
                 <div className={classNames('row')}>
                     <div className={classNames('col-md-12')}>
-                        <span>Welcome to edit screen of cell index {`${this.getEditCellIndex()}`}!</span>
+                        <h5>Welcome to edit screen of cell index {`${this.getEditCellIndex()}`}!</h5>
+                        <button onClick={this.addPSPMeasClick}>Add PSP measurement</button>
                     </div>
                 </div>
 

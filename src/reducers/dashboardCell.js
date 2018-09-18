@@ -8,7 +8,8 @@ export default function dashboardCellReducer(state = initialState.dashbard_cell,
     switch (action.type) {
         case types.RESET_DASHBOARD_CELL:
             return initialState.dashbard_cell;
-        case (types.ADD_DASHBOARD_CELL && types.ADD_DASHBOARD_CELL_PSP):
+        case types.ADD_DASHBOARD_CELL:
+        case types.ADD_DASHBOARD_CELL_PSP:
             //return a new cell object with the action props
             return createDashboardCell(action);
         case types.EDIT_DASHBOARD_CELL_PROPS:
@@ -16,7 +17,7 @@ export default function dashboardCellReducer(state = initialState.dashbard_cell,
             return {
                 ...state,
                 ...action.editProps
-            };            
+            };
         default:
             return state;
     }
