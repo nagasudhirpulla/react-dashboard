@@ -5,6 +5,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Dashboard from '../components/Dashboard';
 import EditDashboard from '../components/EditDashboard';
+import DashboardList from '../components/DashboardList';
 import { ConnectedRouter } from 'connected-react-router'
 /*
   <BrowserRouter>
@@ -16,6 +17,7 @@ export default (props) => (
     <Switch>
       <Route exact path='/' component={Dashboard} />
       <Route path='/edit/:id' component={EditDashboard} />
+      <Route path='/dashboards' component={DashboardList} />
     </Switch>
   </ConnectedRouter>
 );

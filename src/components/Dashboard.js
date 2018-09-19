@@ -8,6 +8,7 @@ https://codepen.io/anon/pen/VKxRoE?editors=1100
 import React from 'react';
 import { connect } from 'react-redux';
 import DashboardCell from './DashboardCell';
+import { Link } from "react-router-dom";
 import './Dashboard.css';
 import Modal from './Modal'
 import classNames from 'classnames';
@@ -160,6 +161,7 @@ class Dashboard extends React.Component {
                             <button className={classNames('btn', 'btn-primary')} onClick={this.saveDashBoard}>Save Dashboard</button>
                         </Modal>
                         <button onClick={this.showModal}>Save Dashboard</button>
+                        <Link to="/dashboards">Dashboards</Link>
                     </div>
                 </div>
                 <div className={classNames('row')}>
