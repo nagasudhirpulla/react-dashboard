@@ -10,7 +10,7 @@ https://github.com/josdejong/jsoneditor/blob/master/examples/requirejs_demo/scri
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { loadDashboardFromAddress } from '../actions/dashBoardActions';
+import { loadDashboardFromAddress, editDashboardServerBaseAddr } from '../actions/dashBoardActions';
 import { push } from 'connected-react-router';
 import { Link } from "react-router-dom";
 
@@ -20,11 +20,12 @@ class DashboardList extends React.Component {
         this.populateDashboardList = this.populateDashboardList.bind(this);
         this.dashListItemClick = this.dashListItemClick.bind(this);
         this.handleBaseAddrTxtChange = this.handleBaseAddrTxtChange.bind(this);
+        this.updateDashboardBaseAddr = this.updateDashboardBaseAddr.bind(this);
         // initialize screen state
         this.state = {
             props: props,
             dashList: [],
-            baseAddr: 'http://localhost:8807'
+            baseAddr: props.dashboard_server_base_addr
         };
     }
 
@@ -40,6 +41,10 @@ class DashboardList extends React.Component {
 
     handleBaseAddrTxtChange = (event) => {
         this.setState({ baseAddr: event.target.value });
+    }
+
+    updateDashboardBaseAddr = () => {
+        this.state.props.changeBaseAddr(this.state.baseAddr);
     }
 
     populateDashboardList = async () => {
@@ -72,6 +77,7 @@ class DashboardList extends React.Component {
                     <div className={classNames('col-md-12')}>
                         <h3>Dashboards list</h3>
                         <input type="text" value={this.state.baseAddr} onChange={this.handleBaseAddrTxtChange} />
+                        <button onClick={this.updateDashboardBaseAddr}>Update Base Address</button>
                         <ul>{dashNameRows}</ul>
                         <button onClick={this.populateDashboardList}>Refresh list</button>
                         <br/>
@@ -84,7 +90,7 @@ class DashboardList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {dashboard_server_base_addr: state.dashboard.dashboard_server_base_addr};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -92,6 +98,9 @@ const mapDispatchToProps = (dispatch) => {
         openDashboard: (filePath) => {
             dispatch(push(`/`));
             dispatch(loadDashboardFromAddress(filePath));
+        },
+        changeBaseAddr: (addr) => {
+            dispatch(editDashboardServerBaseAddr(addr));
         }
     };
 };

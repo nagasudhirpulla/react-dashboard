@@ -56,6 +56,16 @@ export function deleteDashboardCell(index) {
 	return { type: types.DELETE_DASHBOARD_CELL, index: index };
 }
 
+export function editDashboardPropsAction(editProps) {
+	return { type: types.EDIT_DASHBOARD_PROPS, editProps: editProps };
+}
+
+export function editDashboardServerBaseAddr(addr) {
+	return function (dispatch) {
+		dispatch(editDashboardPropsAction({'dashboard_server_base_addr':addr}));
+	};
+}
+
 export function editDashboardCell(index) {
 	return function (dispatch) {
 		//todo implement this

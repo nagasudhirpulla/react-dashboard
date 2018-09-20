@@ -4,7 +4,8 @@ https://github.com/SophieDeBenedetto/catbook-redux/blob/master/src/reducers/init
 export default {
     dashboard: {
         dashboard_name: 'Dashboard Web App',
-        dashboard_cells: []
+        dashboard_cells: [],
+        dashboard_server_base_addr: 'http://localhost:8807'
     },
     dashbard_cell: {
         cell_name: 'Dashboard Cell',

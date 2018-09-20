@@ -60,7 +60,7 @@ export default function dashboardReducer(state = initialState.dashboard, action)
             return {
                 ...state,
                 ...action.editProps
-            };
+            };        
         default:
             return state;
     }
