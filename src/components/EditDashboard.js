@@ -17,6 +17,7 @@ import './EditDashboard.css';
 import essentialProps from '../reducers/essentialProps';
 import * as cellTypes from '../actions/cellTypes';
 import { checkNested } from '../utils/objectUtils';
+import { Link } from "react-router-dom";
 
 class EditDashboard extends React.Component {
     constructor(props) {
@@ -120,6 +121,8 @@ class EditDashboard extends React.Component {
                     <div className={classNames('col-md-12')}>
                         <h5>Welcome to edit screen of cell index {`${this.getEditCellIndex()}`}!</h5>
                         <button onClick={this.addPSPMeasClick}>Add PSP measurement</button>
+                        <br/>
+                        <Link to="/">Go to Dashboard</Link>
                     </div>
                 </div>
 

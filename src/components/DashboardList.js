@@ -10,8 +10,9 @@ https://github.com/josdejong/jsoneditor/blob/master/examples/requirejs_demo/scri
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { loadDashboardFromAddress } from '../actions/dashBoardActions'
-import { push } from 'connected-react-router'
+import { loadDashboardFromAddress } from '../actions/dashBoardActions';
+import { push } from 'connected-react-router';
+import { Link } from "react-router-dom";
 
 class DashboardList extends React.Component {
     constructor(props) {
@@ -73,6 +74,8 @@ class DashboardList extends React.Component {
                         <input type="text" value={this.state.baseAddr} onChange={this.handleBaseAddrTxtChange} />
                         <ul>{dashNameRows}</ul>
                         <button onClick={this.populateDashboardList}>Refresh list</button>
+                        <br/>
+                        <Link to="/">Go to Dashboard</Link>
                     </div>
                 </div>
             </div>
