@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
         }
         let respObj;
         if (window.confirm("Are you sure to save the Dashbaord to the file server?")) {
-            respObj = await this.saveDasboardAsync(this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
+            respObj = await this.saveDasboardAsync(this.state.dashboard_server_base_addr, this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
         }
 
         if (respObj.success === true) {
@@ -93,9 +93,9 @@ class Dashboard extends React.Component {
         this.setState({ saveOverride: event.target.checked });
     }
 
-    async saveDasboardAsync(filename, rewrite, jsonObj) {
+    async saveDasboardAsync(baseAddr, filename, rewrite, jsonObj) {
         try {
-            const resp = await fetch('http://localhost:8807/api/dashboards/create', {
+            const resp = await fetch(baseAddr+'/api/dashboards/create', {
                 method: 'post',
                 headers: {
                     "accept": "application/json",
