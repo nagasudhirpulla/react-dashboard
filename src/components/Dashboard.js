@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
         }
         let respObj;
         if (window.confirm("Are you sure to save the Dashbaord to the file server?")) {
-            respObj = await this.saveDasboardAsync(this.state.dashboard_server_base_addr, this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
+            respObj = await this.saveDasboardAsync(this.state.props.dashboard.dashboard_server_base_addr, this.dashBoardNameInput.current.value, this.state.saveOverride, dashboardExpObj);
         }
 
         if (respObj.success === true) {
