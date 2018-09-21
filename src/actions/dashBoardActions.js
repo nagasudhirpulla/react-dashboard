@@ -115,7 +115,8 @@ export async function getDashboardCellCSVArray(dashboardCellObj) {
 	// update the dashboardObj cells with the fetched csvArray
 	const csvUrl = dashboardCellObj.csv_plot_props.csv_address;
 	const delimiter = dashboardCellObj.csv_plot_props.csv_delimiter;
-	const csvArray = await fetchCSVArrayProm(csvUrl, delimiter);
+	const lineDelimiter = dashboardCellObj.csv_plot_props.line_delimiter;
+	const csvArray = await fetchCSVArrayProm(csvUrl, delimiter, lineDelimiter);
 	return csvArray;
 }
 

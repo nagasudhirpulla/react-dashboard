@@ -279,11 +279,11 @@ export function extractCSVHExprColumnsArr(csvArray, columnNames) {
     return csvColsArr;
 }
 
-export async function fetchCSVArrayProm(csvUrl, delimiter = ',') {
+export async function fetchCSVArrayProm(csvUrl, delimiter = ',', lineDelimiter = '\r\n') {
     try {
         const resp = await fetch(csvUrl);
         const csv = await resp.text();
-        let lines = csv.split('\r\n');
+        let lines = csv.split(lineDelimiter);
         let result = lines.map(function (line) {
             return line.split(delimiter);
         });
