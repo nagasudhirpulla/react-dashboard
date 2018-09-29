@@ -1,6 +1,9 @@
 import * as types from './actionTypes';
 import * as cellTypes from './cellTypes';
 import { fetchCSVArrayProm, fetchCSVArray, fetchPspLabelData, getPspRequesTimeStr, calculatePspRequesTime } from '../utils/csvUtils';
+import { fetchScadaData } from '../utils/fetchUtils';
+import { getDateObjFromMeasVars } from '../utils/timeUtils';
+import { convertDateObjToScadaApiTimeStr, createScadaFetchUrl } from '../utils/stringUtils';
 import { push } from 'connected-react-router'
 import essentialProps from '../reducers/essentialProps';
 import deepmerge from 'deepmerge';
@@ -62,7 +65,7 @@ export function editDashboardPropsAction(editProps) {
 
 export function editDashboardServerBaseAddr(addr) {
 	return function (dispatch) {
-		dispatch(editDashboardPropsAction({'dashboard_server_base_addr':addr}));
+		dispatch(editDashboardPropsAction({ 'dashboard_server_base_addr': addr }));
 	};
 }
 
@@ -79,6 +82,8 @@ export function updateDashboardCell(cellIndex, dashboardCell) {
 			dashboardCell = await updateDashboardCellCSVArray(dashboardCell);
 		} else if ([cellTypes.psp_api_plot].indexOf(dashboardCell.cell_type) > -1) {
 			dashboardCell = await updateDashboardCellPspLabelData(dashboardCell);
+		} else if ([cellTypes.scada_api_plot].indexOf(dashboardCell.cell_type) > -1) {
+			dashboardCell = await updateDashboardCellScadaData(dashboardCell);
 		}
 		dispatch(updateCellAction(cellIndex, dashboardCell));
 	};
@@ -98,6 +103,9 @@ export async function updateAllDashboardCells(dashboardObj, dispatch) {
 		}
 		else if (dashboardObj.dashboard_cells[i].cell_type === cellTypes.psp_api_plot) {
 			dashboardObj.dashboard_cells[i] = await updateDashboardCellPspLabelData(dashboardObj.dashboard_cells[i]);
+		}
+		else if (dashboardObj.dashboard_cells[i].cell_type === cellTypes.scada_api_plot) {
+			dashboardObj.dashboard_cells[i] = await updateDashboardCellScadaData(dashboardObj.dashboard_cells[i]);
 		}
 		// handle other cell types like api cell fetching here
 	}
@@ -166,5 +174,65 @@ export async function updateDashboardCellPspLabelData(dashboardCellObj) {
 		xLabelArrays.push(res.xLabels);
 	}
 	dashboardCellObj.data = { xArrays: xArrays, yArrays: yArrays, xLabelArrays: xLabelArrays, xHeadings: xHeadings, yHeadings: yHeadings, };
+	return dashboardCellObj;
+}
+
+export async function updateDashboardCellScadaData(dashboardCellObj) {
+	// update the dashboardObj cells with the fetched csvArray
+	//todo ensure essential fields
+	if (dashboardCellObj.scada_api_plot_props === undefined) {
+		return dashboardCellObj;
+	}
+	let measurements = dashboardCellObj.scada_api_plot_props.measurements;
+	if (measurements === undefined) {
+		return dashboardCellObj;
+	}
+	let xArrays = [];
+	let yArrays = [];
+	let xHeadings = [];
+	let yHeadings = [];
+	let xLabelArrays = [];
+	for (let measIter = 0; measIter < measurements.length; measIter++) {
+		//deepmerge with essential measurent
+		const measurement = deepmerge(essentialProps.scada_api_measurement, measurements[measIter]);
+		/*
+		//http://localhost:61238/api/values/history?type=snap&pnt=something&strtime=30/11/2016/00:00:00&endtime=30/11/2016/23:59:00&secs=60
+        {
+		base_url: 'http://wmrm0mc1:62448',
+		name: 'WR Demand',
+        pnt_id: 'WRLDCMP.SCADA1.A0047000',
+        start_time_mode: 'variable',
+        start_date_mode: 'variable',
+        start_day: -10,
+        start_month: 0,
+        start_year: 0,
+        start_hours: 0,
+        start_mins: 0,
+        start_secs: 0,
+        end_time_mode: 'variable',
+        end_date_mode: 'variable',
+        end_day: -1,
+        end_month: 0,
+        end_year: 0,
+        end_hours: 0,
+        end_mins: 0,
+		end_secs: 0,
+		period_secs: 60,
+		fetch_strategy: 'average'
+        }
+		 */
+		//figure out the time strings
+		const startTimeStr = convertDateObjToScadaApiTimeStr(getDateObjFromMeasVars(measurement.start_time_mode, measurement.start_date_mode, measurement.start_year, measurement.start_month, measurement.start_day, measurement.start_hours, measurement.start_mins, measurement.start_secs));
+		const endTimeStr = convertDateObjToScadaApiTimeStr(getDateObjFromMeasVars(measurement.end_time_mode, measurement.end_date_mode, measurement.end_year, measurement.end_month, measurement.end_day, measurement.end_hours, measurement.end_mins, measurement.end_secs));
+		//create the scada data URL
+		const dataUrl = createScadaFetchUrl(measurement.base_url, measurement.pnt_id, 'history', startTimeStr,endTimeStr, measurement.period_secs, measurement.fetch_strategy);
+		const res = await fetchScadaData(dataUrl);
+		xArrays.push(res.xVals);
+		yArrays.push(res.yVals);
+		xHeadings.push('time');
+		yHeadings.push(measurement.name);
+		xLabelArrays.push(res.xLabels);
+	}
+	dashboardCellObj.data = { xArrays: xArrays, yArrays: yArrays, xLabelArrays: xLabelArrays, xHeadings: xHeadings, yHeadings: yHeadings };
 	return dashboardCellObj;
 }

@@ -50,6 +50,11 @@ class DashboardCell extends React.Component {
                 props.cellProps.psp_api_plot_props = {};
             }
             props.cellProps.psp_api_plot_props = deepmerge(essentialProps.psp_api_plot_props, props.cellProps.psp_api_plot_props);   
+        } else if ([cellTypes.scada_api_plot].indexOf(props.cellProps.cell_type) > -1) {
+            if (props.cellProps.scada_api_plot_props === undefined) {
+                props.cellProps.scada_api_plot_props = {};
+            }
+            props.cellProps.scada_api_plot_props = deepmerge(essentialProps.scada_api_plot_props, props.cellProps.scada_api_plot_props);   
         }
         //cell index
         this.state.cellIndex = props.cellIndex;
@@ -97,6 +102,20 @@ class DashboardCell extends React.Component {
             // update the plot component
             let cellComponent = <ScatterPlot
                 {...cellProps.psp_api_plot_props} {...otherProps}
+            />;
+            this.state.cellComponent = cellComponent;
+        } else if ([cellTypes.scada_api_plot].indexOf(cellProps.cell_type) > -1) {
+            const cellData = cellProps.data;
+            //set the plot component xArrays and yArrays
+            let xArrays = cellData.xArrays;
+            let yArrays = cellData.yArrays;
+            let xLabelArrays = cellData.xLabelArrays;
+            let x_headings = cellData.xHeadings;
+            let y_headings = cellData.yHeadings;
+            let otherProps = {xArrays, yArrays, xLabelArrays, x_headings, y_headings};
+            // update the plot component
+            let cellComponent = <ScatterPlot
+                {...cellProps.scada_api_plot_props} {...otherProps}
             />;
             this.state.cellComponent = cellComponent;
         }

@@ -72,6 +72,10 @@ class EditDashboard extends React.Component {
             if (cellJSON.psp_api_plot_props === undefined) {
                 cellJSON.psp_api_plot_props = essentialProps.psp_api_plot_props;
             }
+        } else if ([cellTypes.scada_api_plot].indexOf(cellJSON.cell_type) > -1) {
+            if (cellJSON.scada_api_plot_props === undefined) {
+                cellJSON.scada_api_plot_props = essentialProps.scada_api_plot_props;
+            }
         }
         editor.set(cellJSON);
         this.setState({ editor: editor });
@@ -88,7 +92,7 @@ class EditDashboard extends React.Component {
                     newDashboardCellObj.csv_plot_props.csvArray = cellJSON.csv_plot_props.csvArray;
                 }
             }
-            else if ([cellTypes.psp_api_plot].indexOf(cellJSON.cell_type) > -1) {
+            else if ([cellTypes.psp_api_plot, cellTypes.scada_api_plot].indexOf(cellJSON.cell_type) > -1) {
                 //restore cell data
                 newDashboardCellObj.data = cellJSON.data;
             }
@@ -121,7 +125,7 @@ class EditDashboard extends React.Component {
                     <div className={classNames('col-md-12')}>
                         <h5>Welcome to edit screen of cell index {`${this.getEditCellIndex()}`}!</h5>
                         <button onClick={this.addPSPMeasClick}>Add PSP measurement</button>
-                        <br/>
+                        <br />
                         <Link to="/">Go to Dashboard</Link>
                     </div>
                 </div>

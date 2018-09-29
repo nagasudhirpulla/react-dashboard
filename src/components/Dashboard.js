@@ -60,7 +60,7 @@ class Dashboard extends React.Component {
                 if (checkNested(dashboardExpObj.dashboard_cells[cellIndex], 'csv_plot_props', 'csvArray')) {
                     dashboardExpObj.dashboard_cells[cellIndex].csv_plot_props['csvArray'] = undefined;
                 }
-            } else if ([cellTypes.psp_api_plot].indexOf(dashboardExpObj.dashboard_cells[cellIndex].cell_type) > -1) {
+            } else if ([cellTypes.psp_api_plot, cellTypes.scada_api_plot].indexOf(dashboardExpObj.dashboard_cells[cellIndex].cell_type) > -1) {
                 dashboardExpObj.dashboard_cells[cellIndex].data = undefined;
             }
         }

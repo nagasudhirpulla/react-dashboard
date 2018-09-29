@@ -56,6 +56,34 @@ export default {
         end_month: 0,
         end_year: 0
     },
+    scada_api_plot_props: {
+        measurements: []
+    },
+    scada_api_measurement:
+    {
+        //http://localhost:61238/api/values/history?type=snap&pnt=something&strtime=30/11/2016/00:00:00&endtime=30/11/2016/23:59:00&secs=60
+        base_url: 'http://wmrm0mc1:62448',
+        name: 'WR Demand',
+        pnt_id: 'WRLDCMP.SCADA1.A0047000',
+        start_time_mode: 'variable',
+        start_date_mode: 'variable',
+        start_day: -10,
+        start_month: 0,
+        start_year: 0,
+        start_hours: 0,
+        start_mins: 0,
+        start_secs: 0,
+        end_time_mode: 'variable',
+        end_date_mode: 'variable',
+        end_day: -1,
+        end_month: 0,
+        end_year: 0,
+        end_hours: 0,
+        end_mins: 0,
+		end_secs: 0,
+		period_secs: 60,
+		fetch_strategy: 'average'
+    },
     scatter_plot: {
         xArrays: [],
         yArrays: [],
