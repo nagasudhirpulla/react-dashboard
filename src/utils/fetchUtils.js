@@ -14,7 +14,7 @@ export async function fetchScadaData(dataUrl) {
         let xLabels = [];
         for (let rowIter = 0; rowIter < jsonResp.length; rowIter++) {
             const row = jsonResp[rowIter];
-            xVals[rowIter] = Number(row['timestamp']);
+            xVals[rowIter] = rowIter;
             xLabels[rowIter] = row['timestamp'];
             yVals[rowIter] = Number(row['dval']);
         }
