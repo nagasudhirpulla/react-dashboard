@@ -356,5 +356,5 @@ function ensureTwoDigits(inpNum) {
     if (!isNaN(inpNum) && inpNum < 10) {
         return '0' + inpNum;
     }
-    return inpNum;
+    return '' + inpNum;
 }
