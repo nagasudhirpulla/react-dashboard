@@ -5,6 +5,7 @@ export default {
     dashboard: {
         dashboard: {
             dashboard_name: 'Dashboard Web App',
+            dashboard_server_base_addr: 'http://10.2.100.56:8807',
             dashboard_cells: []
         },
         onCellCSVFetchClick: (dispatch, key, url, delimiter) => { }
