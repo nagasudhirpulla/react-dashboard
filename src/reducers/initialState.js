@@ -5,7 +5,7 @@ export default {
     dashboard: {
         dashboard_name: 'Dashboard Web App',
         dashboard_cells: [],
-        dashboard_server_base_addr: 'http://localhost:8807'
+        dashboard_server_base_addr: 'http://10.2.100.56:8807'
     },
     dashbard_cell: {
         cell_name: 'Dashboard Cell',
@@ -19,7 +19,7 @@ export default {
             plot_modes: ['lines'],
             x_headings: ['x'],
             y_headings: ['y'],
-            csv_address: 'http://localhost:8807/sample_1.csv'
+            csv_address: 'http://10.2.100.56:8807/sample_1.csv'
         },
         data: {}
     }

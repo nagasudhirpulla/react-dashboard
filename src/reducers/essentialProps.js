@@ -29,7 +29,7 @@ export default {
                 csvArray: [],
                 x_headings: [],
                 y_headings: [],
-                csv_address: 'http://localhost:8807/sample_1.csv'
+                csv_address: 'http://10.2.100.56:8807/sample_1.csv'
             }*/
         }
     },
@@ -37,7 +37,7 @@ export default {
         csvArray: [],
         x_headings: [],
         y_headings: [],
-        csv_address: 'http://localhost:8807/sample_1.csv'
+        csv_address: 'http://10.2.100.56:8807/sample_1.csv'
     },
     psp_api_plot_props: {
         measurements: []
